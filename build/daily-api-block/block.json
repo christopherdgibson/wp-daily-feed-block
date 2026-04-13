@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-block/daily-api-block",
+  "version": "0.1.0",
+  "title": "Daily Api Block",
+  "category": "widgets",
+  "icon": "calendar",
+  "description": "Example block scaffolded with Create Block tool.",
+  "example": {},
+  "attributes": {
+    "calendarBgColor": {
+      "type": "string",
+      "default": "#262829"
+    },
+    "calendarFontColor": {
+      "type": "string",
+      "default": "#fff"
+    },
+    "meetingsBgColor": {
+      "type": "string",
+      "default": "#82c1f2"
+    },
+    "meetingsFontColor": {
+      "type": "string",
+      "default": "#0d3ca1"
+    },
+    "meetingsDividerColorLeft": {
+      "type": "string",
+      "default": "#0000FF"
+    },
+    "meetingsDividerColorRight": {
+      "type": "string",
+      "default": "#FFA500"
+    }
+  },
+  "supports": {
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": {
+      "text": true
+    },
+    "html": false
+  },
+  "textdomain": "daily-api-block",
+  "editorScript": "file:./index.js",
+  "editorStyle": [
+    "file:./dailyApi.css",
+    "file:./calendar.css"
+  ],
+  "style": [
+    "file:./dailyApi.css",
+    "file:./calendar.css"
+  ],
+  "viewScript": "file:./view.js"
+}

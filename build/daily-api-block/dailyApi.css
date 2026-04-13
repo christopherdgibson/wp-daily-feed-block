@@ -1,0 +1,229 @@
+.api-data-container {
+	float: none;
+	border: none !important; 
+
+	--base-hue: 260;
+	--font-family: Inter;
+	--leading: 1.5;
+
+	--bg-color: hsl(var(--base-hue) 25% 25%);
+	--bg-img-url: linear-gradient(white, rgb(235, 197, 82));
+	--text-color: hsl(var(--base-hue) 40% 25%);
+
+	--card-width: 100%;
+	--card-height: 500px;
+	--card-padding: 1.25rem;
+	--card-corner-radius: 1.5rem;
+	--card-bg-blur-amount: 1rem;
+	--card-shadow: 0 0 0.5rem 2px hsl(var(--base-hue) 25% 25% / 35%),
+		inset 0 0 0.1rem hsl(var(--base-hue) 75% 40% / 20%),
+		inset 0 0 0.2rem 0.1rem hsl(var(--base-hue) 75% 40% / 15%),
+		inset 0 0 0.3rem 0.2rem hsl(var(--base-hue) 75% 40% / 10%);
+
+	--meetings-max-width: 1200px;
+	--meetings-bg-color: #0d3ca1;
+	--meetings-font-color: #0d3ca1;
+	--meetings-hover-bg-color: #ade5f6;
+	--meetings-hover-font-color: var(--meetings-font-color);
+	--card-max-width: 1200px;
+	--card-min-width: 255px;
+	--grad-card: #e0e4e5, #f2f6f9;
+	--meetings_description_bl: #82c1f2;
+	--grad-selected: #e0e4e5, var(--meetings_description_bl);
+	/* --grad-color-left: #0000ff;
+	--grad-color-right: #ffa500; */
+
+	* {
+		&,
+		&:before,
+		&:after {
+			box-sizing: border-box;
+		}
+	}
+
+	/* body {
+    font: 1em / var(--leading) var(--font-family), sans-serif;
+    color: var(--text-color);
+    background: var(--bg-color) var(--bg-img-url) center / cover no-repeat fixed;
+  } */
+
+	/* p {
+    margin: 0;
+    &:not(:last-child) {
+      margin-bottom: 1.5rem;
+    }
+  } */
+
+	/* display: flex; */
+	/* font: 1em / var(--leading) var(--font-family), sans-serif;
+    color: var(--text-color);
+    justify-content: space-between;
+    align-items: start;
+     background: var(--bg-color) var(--bg-img-url) center / cover no-repeat fixed; */
+
+	.api-data-column {
+		margin: auto;
+		width: 90%;
+	}
+
+	.api-data-date-container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	.api-data {
+		/* color: #0d3ca1; */
+		font-size: 20px;
+	}
+
+	.api-data .api-data-title {
+		font-size: 24px;
+	}
+
+	.api-data .strong-section {
+		font-weight: bold;
+	}
+
+	.api-data-date {
+		float: left;
+		align-items: left;
+	}
+
+	.calendar {
+		margin-left: 20px !important;
+		margin-bottom: 20px;
+	}
+
+	.checkbtn-calendar {
+		font-size: 30px;
+		color: black;
+		cursor: pointer;
+		display: none;
+	}
+
+	#check-calendar {
+		display: none;
+	}
+
+	.card {
+		--grad: var(--grad-color-left), var(--grad-color-right);
+		padding: 20px;
+
+		background-image: linear-gradient(to bottom left, var(--grad-card));
+		min-width: var(--card-min-width);
+		max-width: var(--card-max-width);
+		/* min-height: 0; */
+		min-height: var(--card-height);
+		border-radius: 10px;
+
+		grid-template: "content" "bar";
+		grid-template-rows: 1fr auto;
+		display: grid;
+
+		font-family: system-ui, sans-serif;
+		color: var(--meetings-font-color);
+		box-shadow:
+			inset -2px 2px hsl(0 0 100% / 1),
+			-10px 10px 15px hsl(0 0 0 / 0.25);
+
+		.content-container {
+			grid-area: content;
+			/* align-self: end;
+			text-transform: uppercase;
+			font-weight: 500;
+			word-break: break-word; */
+		}
+
+		.meeting-icon {
+			grid-area: icon;
+			font-size: 3rem;
+
+			> i {
+				color: transparent;
+				background: linear-gradient(to bottom right, var(--grad));
+				background-clip: text;
+			}
+		}
+		.meeting-title {
+			grid-area: content;
+			& > *:first-child {
+				margin-top: 0rem;
+			}
+			& > *:last-child {
+				margin-bottom: 0rem;
+			}
+		}
+		&::after {
+			content: "";
+			grid-area: bar;
+			height: 2px;
+			background-image: linear-gradient(90deg, var(--grad));
+		}
+		.meeting-title-small {
+			grid-area: content;
+			& > *:first-child {
+				margin-top: 0rem;
+			}
+			& > *:last-child {
+				margin-bottom: 0rem;
+			}
+		}
+		&:hover {
+			background-image: none;
+		}
+	}
+
+	.api-data .api-data-copyright {
+		margin-top: 1rem;
+		font-size: 0.75rem;
+		opacity: 75%;
+	}
+
+	@media (max-width: 768px) {
+		.checkbtn-calendar {
+			display: block;
+			order: 1;
+			margin-right: 20px;
+		}
+		/* .api-data-container {
+      flex-direction: column;
+    } */
+		.calendar {
+			display: none;
+		}
+		.api-data-column {
+			width: 90%;
+			margin: auto;
+		}
+
+		ul {
+			position: fixed;
+			top: 80px;
+			right: -100%;
+			background-color: rgb(0, 0, 127);
+			width: 100%;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			transition: all 0.3s;
+			li {
+				position: relative;
+				margin: 20px 0;
+				width: calc(100%);
+				a {
+					font-size: 20px;
+					width: calc(100%);
+					justify-content: center;
+				}
+			}
+		}
+
+		/* #check:checked ~ ul {
+      right: 0;
+      align-content: center;
+    } */
+	}
+}
