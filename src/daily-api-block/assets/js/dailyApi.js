@@ -1,39 +1,39 @@
 export function fetchDailyApiData(containerRef, date) {
 	const apiDataDiv = containerRef.querySelector(".api-data");
 	console.log("apiDataDiv:", apiDataDiv);
-	if (apiDataDiv) {
-		// console.log("entered if(apiDataDiv) block", apiDataDiv);
-		const apiUrl = getApiDataUrl(date);
-		console.log("apiUrl:", apiUrl);
-		const apiPath = `/wordpress-6.9/wordpress/wp-admin/admin-ajax.php?action=api_proxy&url=${apiUrl}`;
-		fetchWithRetry(apiPath)
-			.then((jsondta) => {
-				if (jsondta == null) {
-					console.log("jsondta null");
-					return;
-				}
-				console.log("jsondta:", jsondta);
-				console.log("jsondta.data:", jsondta.data);
-				let dataObj;
-				const tempDiv = document.createElement("div");
-				let bodyHTML = document.createElement("div");
-				bodyHTML.className = "api-data-body";
-				let referenceHTML = document.createElement("div");
-				referenceHTML.className = "api-data-copyright";
-				let outputHTML = "";
-				dataObj = jsondta.data;
-				console.log("dataObj", dataObj);
-				//need if statement here so dataObj isn't null
-				bodyHTML.innerHTML = dataObj.Events[0].text;
-				referenceHTML.innerHTML = dataObj.Events[0].html;
-				outputHTML += bodyHTML.outerHTML;
-				outputHTML += referenceHTML.outerHTML;
-				setApiDataDate(containerRef, date);
-				apiDataDiv.innerHTML =
-					outputHTML || "No data found. Try reloading page.";
-			})
-			.catch((error) => console.error("Error:", error));
-	}
+	if (!apiDataDiv) return;
+	// console.log("entered if(apiDataDiv) block", apiDataDiv);
+	const apiUrl = getApiDataUrl(date);
+	console.log("apiUrl:", apiUrl);
+	const apiPath = `/wordpress-6.9/wordpress/wp-admin/admin-ajax.php?action=api_proxy&url=${apiUrl}`;
+	
+	fetchWithRetry(apiPath)
+		.then((jsondta) => {
+			if (jsondta == null) {
+				console.log("jsondta null");
+				return;
+			}
+			console.log("jsondta:", jsondta);
+			console.log("jsondta.data:", jsondta.data);
+			let dataObj;
+			const tempDiv = document.createElement("div");
+			let bodyHTML = document.createElement("div");
+			bodyHTML.className = "api-data-body";
+			let referenceHTML = document.createElement("div");
+			referenceHTML.className = "api-data-copyright";
+			let outputHTML = "";
+			dataObj = jsondta.data;
+			console.log("dataObj", dataObj);
+			//need if statement here so dataObj isn't null
+			bodyHTML.innerHTML = dataObj.Events[0].text;
+			referenceHTML.innerHTML = dataObj.Events[0].html;
+			outputHTML += bodyHTML.outerHTML;
+			outputHTML += referenceHTML.outerHTML;
+			setApiDataDate(containerRef, date);
+			apiDataDiv.innerHTML =
+				outputHTML || "No data found. Try reloading page.";
+		})
+		.catch((error) => console.error("Error:", error));
 }
 
 function setApiDataDate(containerRef, date) {
