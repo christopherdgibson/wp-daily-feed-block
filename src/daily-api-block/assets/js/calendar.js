@@ -3,12 +3,12 @@
 //Added previous month and next month view
 
 export class CalendarControl {
-	constructor(calendarRef) {
-		this.calendarRef = calendarRef;
+	constructor(calendarContainerRef) {
+		this.calendarContainerRef = calendarContainerRef;
 		this.selectedDate = new Date();
 		// this.onDateChange = null;
 		//console.log("createCalendarControl constructor initialised");
-		createCalendarControl(calendarRef, this.handleDateChange.bind(this));
+		createCalendarControl(calendarContainerRef, this.handleDateChange.bind(this));
 	}
 
 	handleDateChange(date) {
@@ -32,7 +32,8 @@ export class CalendarControl {
 	}
 }
 
-export function createCalendarControl(calendarRef, onDateChange) {
+export function createCalendarControl(calendarContainerRef, onDateChange) {
+	const calendarRef = calendarContainerRef.querySelector('.calendar');
 	const calendar = new Date();
 	const calendarControl = {
 		localDate: new Date(),
@@ -115,7 +116,8 @@ export function createCalendarControl(calendarRef, onDateChange) {
 			calendarControl.outlineSelected(e.target.textContent);
 		},
 		plotSelectors: function () {
-			calendarRef.innerHTML += `<div class="calendar-inner"><div class="calendar-controls">
+			// calendarRef.innerHTML += 
+			calendarRef.insertAdjacentHTML('beforeend',`<div class="calendar-inner"><div class="calendar-controls">
           <div class="calendar-prev"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><path fill="#666" d="M88.2 3.8L35.8 56.23 28 64l7.8 7.78 52.4 52.4 9.78-7.76L45.58 64l52.4-52.4z"/></svg></a></div>
           <div class="calendar-year-month">
           <div class="calendar-month-label"></div>
@@ -132,13 +134,15 @@ export function createCalendarControl(calendarRef, onDateChange) {
 						}
             ${calendarControl.localDate.getFullYear()}
           </div>
-          <div class="calendar-body"></div></div>`;
+          <div class="calendar-body"></div></div>`);
 		},
 		plotDayNames: function () {
 			for (let i = 0; i < calendarControl.calWeekDays.length; i++) {
-				calendarRef.querySelector(
-					".calendar-body",
-				).innerHTML += `<div>${calendarControl.calWeekDays[i]}</div>`;
+				calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+					`<div>${calendarControl.calWeekDays[i]}</div>`);
+				// calendarRef.querySelector(
+				// 	".calendar-body",
+				// ).innerHTML += `<div>${calendarControl.calWeekDays[i]}</div>`;
 			}
 		},
 		plotDates: function () {
@@ -160,21 +164,27 @@ export function createCalendarControl(calendarRef, onDateChange) {
 			for (let i = 1; i < calendarDays; i++) {
 				if (i < calendarControl.firstDayNumber()) {
 					prevDateCount += 1;
-					calendarRef.querySelector(
-						".calendar-body",
-					).innerHTML += `<div class="prev-dates"></div>`;
+					// calendarRef.querySelector(
+					// 	".calendar-body",
+					// ).innerHTML += `<div class="prev-dates"></div>`;
+					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+						`<div class="prev-dates"></div>`);
 					prevMonthDatesArray.push(calendarControl.prevMonthLastDate--);
 				} else {
-					calendarRef.querySelector(
-						".calendar-body",
-					).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
+					// calendarRef.querySelector(
+					// 	".calendar-body",
+					// ).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
+					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+						`<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`);
 				}
 			}
 			//remaining dates after month dates
 			for (let j = 0; j < prevDateCount + 1; j++) {
-				calendarRef.querySelector(
-					".calendar-body",
-				).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
+				// calendarRef.querySelector(
+				// 	".calendar-body",
+				// ).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
+				calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+					`<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`);
 			}
 			calendarControl.highlightToday();
 			calendarControl.plotPrevMonthDates(prevMonthDatesArray);
@@ -262,9 +272,9 @@ export function createCalendarControl(calendarRef, onDateChange) {
 		loopThroughNextDays: function (count) {
 			if (count > 0) {
 				for (let i = 1; i <= count; i++) {
-					calendarRef.querySelector(
-						".calendar-body",
-					).innerHTML += `<div class="next-dates">${i}</div>`;
+					// calendarRef.querySelector(".calendar-body").innerHTML += `<div class="next-dates">${i}</div>`;
+					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+						`<div class="next-dates">${i}</div>`);
 				}
 			}
 		},
@@ -276,8 +286,6 @@ export function createCalendarControl(calendarRef, onDateChange) {
 			calendarControl.plotSelectors();
 			calendarControl.plotDates();
 			calendarControl.attachEvents();
-			// const today = new Date();
-			// return today;
 		},
 	};
 	calendarControl.init();

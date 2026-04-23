@@ -20,9 +20,8 @@
 
     .calendar {
         font-family: 'IBM Plex Sans', sans-serif;
-        /* position: relative; */
         float: right;
-        max-width: 400px; /*change as per your design need */
+        max-width: 400px;
         min-width: 400px;
         background: var(--calendar-bg-color, #262829);
         color: var(--calendar-font-color, #ffffff);

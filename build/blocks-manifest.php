@@ -6,7 +6,7 @@ return array(
 		'apiVersion' => 3,
 		'name' => 'create-block/daily-api-block',
 		'version' => '0.1.0',
-		'title' => 'Daily Api Block',
+		'title' => 'Daily Feed Block',
 		'category' => 'widgets',
 		'icon' => 'calendar',
 		'description' => 'Example block scaffolded with Create Block tool.',
@@ -24,7 +24,7 @@ return array(
 			),
 			'meetingsBgColor' => array(
 				'type' => 'string',
-				'default' => '#82c1f2'
+				'default' => '#e3e3e3'
 			),
 			'meetingsFontColor' => array(
 				'type' => 'string',
