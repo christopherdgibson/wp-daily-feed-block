@@ -1,15 +1,16 @@
 <?php
 /**
- * Plugin Name:       Daily Api Block
- * Description:       Example block scaffolded with Create Block tool.
- * Version:           0.1.0
+ * Plugin Name: Daily Feed Block
+ * Plugin URI: https://christopherdgibson.github.io/wordpress-plugins
+ * Description: Block for adding agenda items and their descriptions.
+ * Author: Christopher D Gibson
+ * Author URI: https://christopherdgibson.github.io
+ * Version: 0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Author:            The WordPress Contributors
- * License:           GPL-2.0-or-later
+ * License: GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       daily-api-block
- *
+ * Text Domain:       daily-feed-block
  * @package CreateBlock
  */
 
@@ -87,7 +88,7 @@ function api_proxy_function() {
 // function api_data_enqueue_scripts() {
 // 	 wp_enqueue_script(
 //      'api-data-js',
-//      plugins_url('src/daily-api-block/js/calendar.js', __FILE__),
+//      plugins_url('src/daily-feed-block/js/calendar.js', __FILE__),
 //      array(), //dependencies
 //      false, // version
 // 	 true // in footer
@@ -98,7 +99,7 @@ function api_proxy_function() {
 // function api_data_enqueue_editor_assets() {
 // 	 wp_enqueue_script(
 //      'api-data-js-editor',
-//      plugins_url('src/daily-api-block/js/calendar.js', __FILE__),
+//      plugins_url('src/daily-feed-block/js/calendar.js', __FILE__),
 //      array(), //dependencies
 //      false, // version
 // 	 true // in footer

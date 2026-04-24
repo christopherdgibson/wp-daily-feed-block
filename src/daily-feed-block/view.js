@@ -21,5 +21,5 @@
  */
 
 /* eslint-disable no-console */
-console.log( 'Hello World! (from create-block-daily-api-block block)' );
+console.log( 'Hello World! (from create-block-daily-feed-block block)' );
 /* eslint-enable no-console */

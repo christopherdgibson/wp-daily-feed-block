@@ -1,9 +1,12 @@
 {
-	"name": "daily-api-block",
+	"name": "daily-feed-block",
 	"version": "0.1.0",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "The WordPress Contributors",
+	"description": "A daily API display block with calendar navigation.",
+	"author": "Christopher D Gibson",
+	"authorURI": "https://christopherdgibson.github.io",
+	"title": "Daily Feed Block",
 	"license": "GPL-2.0-or-later",
+	"licenseURI": "https://www.gnu.org/licenses/gpl-2.0.html",
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build --blocks-manifest",

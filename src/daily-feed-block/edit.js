@@ -37,6 +37,13 @@ import { CalendarControl } from "./assets/js/calendar.js";
 import { fetchDailyApiData } from "./assets/js/dailyApi.js";
 import { useRef, useEffect, useState } from "@wordpress/element";
 
+const CalendarMount = React.memo(
+    ({ containerRef, style }) => (
+        <div ref={containerRef} class="calendar" style={style}></div>
+    ),
+    () => true
+);
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -128,6 +135,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const containerRef = useRef();
 	const apiDataRef = useRef();
 	const calendarContainerRef = useRef();
+	const calendarRef = useRef();
 	const duotoneRef = useRef(null);
 
 	// useEffect(() => {
@@ -520,43 +528,43 @@ export default function Edit({ attributes, setAttributes }) {
 				<div
 				class="card"
 				ref={containerRef}
-			>
-				<div ref={calendarContainerRef} class="api-data-column calendar-container">
-					<div
-						class="calendar"
-						style={{
-							"--calendar-bg-color": calendarBgColor,
-							"--calendar-font-color": calendarFontColor,
-						}}
-					></div>
-					<div>
-						<div class="api-data-date-container">
-							<div>
-								<input type="checkbox" id="check-calendar" />
-								<label for="check-calendar" class="checkbtn-calendar">
-									<svg
-										width="40"
-										height="40"
-										xmlns="http://www.w3.org/2000/svg"
-										viewbox="0 -50 448 512"
-									>
-										<path
-											fill="black"
-											d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
-										/>
-									</svg>
-								</label>
+				>
+					<div ref={calendarContainerRef} class="api-data-column calendar-container">
+						<CalendarMount
+							containerRef={calendarRef}
+							style={{
+								"--calendar-bg-color": calendarBgColor,
+								"--calendar-font-color": calendarFontColor,
+							}}
+						/>
+						<div>
+							<div class="api-data-date-container">
+								<div>
+									<input type="checkbox" id="check-calendar" />
+									<label for="check-calendar" class="checkbtn-calendar">
+										<svg
+											width="40"
+											height="40"
+											xmlns="http://www.w3.org/2000/svg"
+											viewbox="0 -50 448 512"
+										>
+											<path
+												fill="black"
+												d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
+											/>
+										</svg>
+									</label>
+								</div>
+								<div class="api-data-date">
+									Daily api for {currentDay} {currentMonth}
+								</div>
 							</div>
-							<div class="api-data-date">
-								Daily api for {currentDay} {currentMonth}
+							<div class="api-data" ref={apiDataRef}>
+								Loading api data...
 							</div>
-						</div>
-						<div class="api-data" ref={apiDataRef}>
-							Loading api data...
 						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</>
 	);

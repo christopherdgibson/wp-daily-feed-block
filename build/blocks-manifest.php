@@ -1,15 +1,19 @@
 <?php
 // This file is generated. Do not modify it manually.
 return array(
-	'daily-api-block' => array(
+	'daily-feed-block' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'create-block/daily-api-block',
+		'name' => 'create-block/daily-feed-block',
 		'version' => '0.1.0',
 		'title' => 'Daily Feed Block',
+		'author' => 'Christopher D Gibson',
+		'authorURI' => 'https://christopherdgibson.github.io',
+		'description' => 'A daily API display block with calendar navigation..',
 		'category' => 'widgets',
-		'icon' => 'calendar',
-		'description' => 'Example block scaffolded with Create Block tool.',
+		'icon' => 'rss',
+		'license' => 'GPL-2.0-or-later',
+		'licenseURI' => 'https://www.gnu.org/licenses/gpl-2.0.html',
 		'example' => array(
 			
 		),
@@ -49,7 +53,11 @@ return array(
 			),
 			'html' => false
 		),
-		'textdomain' => 'daily-api-block',
+		'usesContext' => array(
+			
+		),
+		'render' => 'file:./render.php',
+		'textdomain' => 'daily-feed-block',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => array(
 			'file:./dailyApi.css',
