@@ -60,12 +60,10 @@ return array(
 		'textdomain' => 'daily-feed-block',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => array(
-			'file:./dailyApi.css',
-			'file:./calendar.css'
+			'file:./index.css'
 		),
 		'style' => array(
-			'file:./dailyApi.css',
-			'file:./calendar.css'
+			'file:./index.css'
 		),
 		'viewScript' => 'file:./view.js'
 	)

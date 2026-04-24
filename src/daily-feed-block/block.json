@@ -49,9 +49,7 @@
 	"render": "file:./render.php",
 	"textdomain": "daily-feed-block",
 	"editorScript": "file:./index.js",
-	"editorStyle": ["file:./dailyApi.css",
-					"file:./calendar.css"],
-	"style": ["file:./dailyApi.css",
-					"file:./calendar.css"],
+	"editorStyle": ["file:./index.css"],
+	"style": ["file:./index.css"],
 	"viewScript": "file:./view.js"
 }

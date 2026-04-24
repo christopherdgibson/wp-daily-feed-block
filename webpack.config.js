@@ -3,13 +3,8 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
 module.exports = {
     ...defaultConfig,
-    plugins: [
-        ...defaultConfig.plugins,
-        new CopyWebpackPlugin({
-            patterns: [
-                {from: 'src/daily-feed-block/assets/css/dailyApi.css', to: './daily-feed-block/dailyApi.css'},
-                {from: 'src/daily-feed-block/assets/css/calendar.css', to: './daily-feed-block/calendar.css'}
-            ]
-        })
-    ]
-}
+    entry: {
+        'daily-feed-block/index': './src/daily-feed-block/index.js',
+        'daily-feed-block/view': './src/daily-feed-block/view.js',
+    }
+};

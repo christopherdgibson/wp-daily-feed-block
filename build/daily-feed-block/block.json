@@ -53,12 +53,10 @@
   "textdomain": "daily-feed-block",
   "editorScript": "file:./index.js",
   "editorStyle": [
-    "file:./dailyApi.css",
-    "file:./calendar.css"
+    "file:./index.css"
   ],
   "style": [
-    "file:./dailyApi.css",
-    "file:./calendar.css"
+    "file:./index.css"
   ],
   "viewScript": "file:./view.js"
 }

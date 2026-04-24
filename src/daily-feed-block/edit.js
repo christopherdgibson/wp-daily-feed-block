@@ -32,7 +32,8 @@ import {
  */
 // import "./editor.scss";
 import blockMetadata from "./block.json";
-
+import './assets/css/dailyApi.css';
+import './assets/css/calendar.css';
 import { CalendarControl } from "./assets/js/calendar.js";
 import { fetchDailyApiData } from "./assets/js/dailyApi.js";
 import { useRef, useEffect, useState } from "@wordpress/element";

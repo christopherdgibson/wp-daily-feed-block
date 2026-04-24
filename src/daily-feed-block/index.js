@@ -13,6 +13,8 @@ import { registerBlockType } from '@wordpress/blocks';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 // import './style.scss';
+import './assets/css/dailyApi.css';
+import './assets/css/calendar.css';
 
 /**
  * Internal dependencies
