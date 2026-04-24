@@ -26,19 +26,19 @@ return array(
 				'type' => 'string',
 				'default' => '#fff'
 			),
-			'meetingsBgColor' => array(
+			'cardBgColor' => array(
 				'type' => 'string',
 				'default' => '#e3e3e3'
 			),
-			'meetingsFontColor' => array(
+			'cardFontColor' => array(
 				'type' => 'string',
 				'default' => '#0d3ca1'
 			),
-			'meetingsDividerColorLeft' => array(
+			'dividerColorLeft' => array(
 				'type' => 'string',
 				'default' => '#0000FF'
 			),
-			'meetingsDividerColorRight' => array(
+			'dividerColorRight' => array(
 				'type' => 'string',
 				'default' => '#FFA500'
 			)

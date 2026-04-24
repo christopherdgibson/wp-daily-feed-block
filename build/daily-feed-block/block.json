@@ -21,19 +21,19 @@
       "type": "string",
       "default": "#fff"
     },
-    "meetingsBgColor": {
+    "cardBgColor": {
       "type": "string",
       "default": "#e3e3e3"
     },
-    "meetingsFontColor": {
+    "cardFontColor": {
       "type": "string",
       "default": "#0d3ca1"
     },
-    "meetingsDividerColorLeft": {
+    "dividerColorLeft": {
       "type": "string",
       "default": "#0000FF"
     },
-    "meetingsDividerColorRight": {
+    "dividerColorRight": {
       "type": "string",
       "default": "#FFA500"
     }

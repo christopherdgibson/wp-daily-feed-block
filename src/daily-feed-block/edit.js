@@ -57,22 +57,22 @@ export default function Edit({ attributes, setAttributes }) {
 		blockMetadata.attributes.calendarFontColor.default;
 	const DEFAULT_CAL_BG_COLOR = blockMetadata.attributes.calendarBgColor.default;
 	const {
-		meetingsDividerColorLeft,
-		meetingsDividerColorRight,
-		meetingsBgColor,
-		meetingsFontColor,
+		dividerColorLeft,
+		dividerColorRight,
+		cardBgColor,
+		cardFontColor,
 		} = attributes;
-	const DEFAULT_FONT_COLOR = blockMetadata.attributes.meetingsFontColor.default;
-	const DEFAULT_BG_COLOR = blockMetadata.attributes.meetingsBgColor.default;
+	const DEFAULT_FONT_COLOR = blockMetadata.attributes.cardFontColor.default;
+	const DEFAULT_BG_COLOR = blockMetadata.attributes.cardBgColor.default;
 	const DEFAULT_LEFT_COLOR =
-		blockMetadata.attributes.meetingsDividerColorLeft.default;
+		blockMetadata.attributes.dividerColorLeft.default;
 	const DEFAULT_RIGHT_COLOR =
-		blockMetadata.attributes.meetingsDividerColorRight.default;
+		blockMetadata.attributes.dividerColorRight.default;
 	const THEME_ATTRIBUTES = {
-		blue:   { meetingsDividerColorLeft: '#1a56d6', meetingsDividerColorRight: '#e07b20', meetingsFontColor: '#1a56d6', meetingsBgColor: '#c2ddf7' },
-		forest: { meetingsDividerColorLeft: '#1a6b3c', meetingsDividerColorRight: '#c4962a', meetingsFontColor: '#1a6b3c', meetingsBgColor: '#b8dfc8' },
-		plum:   { meetingsDividerColorLeft: '#5b2d8e', meetingsDividerColorRight: '#c0392b', meetingsFontColor: '#5b2d8e', meetingsBgColor: '#d4bfee' },
-		slate:  { meetingsDividerColorLeft: '#2c4a6e', meetingsDividerColorRight: '#e05c3a', meetingsFontColor: '#2c4a6e', meetingsBgColor: '#b8cfe0' }
+		blue:   { dividerColorLeft: '#1a56d6', dividerColorRight: '#e07b20', cardFontColor: '#1a56d6', cardBgColor: '#c2ddf7' },
+		forest: { dividerColorLeft: '#1a6b3c', dividerColorRight: '#c4962a', cardFontColor: '#1a6b3c', cardBgColor: '#b8dfc8' },
+		plum:   { dividerColorLeft: '#5b2d8e', dividerColorRight: '#c0392b', cardFontColor: '#5b2d8e', cardBgColor: '#d4bfee' },
+		slate:  { dividerColorLeft: '#2c4a6e', dividerColorRight: '#e05c3a', cardFontColor: '#2c4a6e', cardBgColor: '#b8cfe0' }
 	};
 	
 	const DEFAULT_DUOTONE_COLORS = [DEFAULT_LEFT_COLOR, DEFAULT_RIGHT_COLOR];
@@ -128,7 +128,8 @@ export default function Edit({ attributes, setAttributes }) {
 	const [activeTab, setActiveTab] = useState("presets");
 	const [activeSubTab, setActiveSubTab] = useState("background");
 	const [activeTheme, setActiveTheme] = useState("default-colors");
-	const [isModalOpenDefault, setIsModalOpenDefault] = useState(false);
+	const [isModalOpenDefaultCalendar, setIsModalOpenDefaultCalendar] = useState(false);
+	const [isModalOpenDefaultCard, setIsModalOpenDefaultCard] = useState(false);
 	const [calendarInstance, setCalendarInstance] = useState(null);
 	const blockProps = useBlockProps({ className: "api-data-container" });
 	// const calendarInstance = useRef();
@@ -185,10 +186,10 @@ export default function Edit({ attributes, setAttributes }) {
 				class="card"
 				ref={containerRef}
 				style={{
-					"--base-bg": meetingsBgColor,
-					"--meetings-font-color": meetingsFontColor,
-					"--grad-color-left": meetingsDividerColorLeft,
-					"--grad-color-right": meetingsDividerColorRight,
+					"--base-bg": cardBgColor,
+					"--font-selected": cardFontColor,
+					"--accent-primary": dividerColorLeft,
+					"--accent-secondary": dividerColorRight,
 				}}
 			>
 				<div ref={calendarContainerRef} class="api-data-column calendar-container">
@@ -232,7 +233,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 	function calendarColorsPanel() {
 		return (
-			<PanelBody title="Calendar Colors">
+			<PanelBody title="Calendar Design">
 				<ButtonGroup>
 					{addActiveCalendarTab("background", "Background")}
 					{addActiveCalendarTab("text", "Text")}
@@ -260,14 +261,14 @@ export default function Edit({ attributes, setAttributes }) {
 					<div style={{ marginTop: "1em", textAlign: "center" }}>
 						<Button
 							variant="primary"
-							onClickCapture={() => setIsModalOpenDefault(true)}
+							onClickCapture={() => setIsModalOpenDefaultCalendar(true)}
 						>
 							Restore to defaults
 						</Button>
-						{isModalOpenDefault && (
+						{isModalOpenDefaultCalendar && (
 							<Modal
 								title="Restore Defaults"
-								onRequestClose={() => setIsModalOpenDefault(false)}
+								onRequestClose={() => setIsModalOpenDefaultCalendar(false)}
 							>
 								<p>Are you sure you want to restore the default colors?</p>
 								<Button
@@ -277,14 +278,14 @@ export default function Edit({ attributes, setAttributes }) {
 											calendarBgColor: DEFAULT_CAL_BG_COLOR,
 											calendarFontColor: DEFAULT_CAL_FONT_COLOR,
 										});
-										setIsModalOpenDefault(false);
+										setIsModalOpenDefaultCalendar(false);
 									}}
 								>
 									Yes, restore.
 								</Button>
 								<Button
 									variant="secondary"
-									onClick={() => setIsModalOpenDefault(false)}
+									onClick={() => setIsModalOpenDefaultCalendar(false)}
 									style={{ marginLeft: "1em" }}
 								>
 									Cancel
@@ -310,9 +311,9 @@ export default function Edit({ attributes, setAttributes }) {
 		);
 	}
 
-	function meetingColorsPanel() {
+	function cardColorsPanel() {
 		return (
-			<PanelBody title="Meetings Colors">
+			<PanelBody title="Card Design">
 				<ButtonGroup>
 					{addActiveTab("presets", "Presets")}
 					{addActiveTab("custom", "Custom")}
@@ -341,18 +342,18 @@ export default function Edit({ attributes, setAttributes }) {
 				</ButtonGroup>
 				{activeSubTab === "background" && (
 					<ColorPicker
-						color={meetingsBgColor}
+						color={cardBgColor}
 						onChangeComplete={(value) =>
-							setAttributes({ meetingsBgColor: value.hex })
+							setAttributes({ cardBgColor: value.hex })
 						}
 						disableAlpha
 					/>
 				)}
 				{activeSubTab === "text" && (
 					<ColorPicker
-						color={meetingsFontColor}
+						color={cardFontColor}
 						onChangeComplete={(value) =>
-							setAttributes({ meetingsFontColor: value.hex })
+							setAttributes({ cardFontColor: value.hex })
 						}
 						disableAlpha
 					/>
@@ -369,33 +370,33 @@ export default function Edit({ attributes, setAttributes }) {
 			<div style={{ marginTop: "1em", textAlign: "center" }}>
 				<Button
 					variant="primary"
-					onClickCapture={() => setIsModalOpenDefault(true)}
+					onClickCapture={() => setIsModalOpenDefaultCard(true)}
 				>
 					Restore to defaults
 				</Button>
-				{isModalOpenDefault && (
+				{isModalOpenDefaultCard && (
 					<Modal
 						title="Restore Defaults"
-						onRequestClose={() => setIsModalOpenDefault(false)}
+						onRequestClose={() => setIsModalOpenDefaultCard(false)}
 					>
 						<p>Are you sure you want to restore the default colors?</p>
 						<Button
 							variant="primary"
 							onClick={() => {
 								setAttributes({
-									meetingsDividerColorLeft: DEFAULT_LEFT_COLOR,
-									meetingsDividerColorRight: DEFAULT_RIGHT_COLOR,
-									meetingsBgColor: DEFAULT_BG_COLOR,
-									meetingsFontColor: DEFAULT_FONT_COLOR,
+									dividerColorLeft: DEFAULT_LEFT_COLOR,
+									dividerColorRight: DEFAULT_RIGHT_COLOR,
+									cardBgColor: DEFAULT_BG_COLOR,
+									cardFontColor: DEFAULT_FONT_COLOR,
 								});
-								setIsModalOpenDefault(false);
+								setIsModalOpenDefaultCard(false);
 							}}
 						>
 							Yes, restore.
 						</Button>
 						<Button
 							variant="secondary"
-							onClick={() => setIsModalOpenDefault(false)}
+							onClick={() => setIsModalOpenDefaultCard(false)}
 							style={{ marginLeft: "1em" }}
 						>
 							Cancel
@@ -413,54 +414,28 @@ export default function Edit({ attributes, setAttributes }) {
 					<DuotonePicker
 						duotonePalette={DUOTONE_PALETTE}
 						value={
-							meetingsDividerColorLeft && meetingsDividerColorRight
-								? [meetingsDividerColorLeft, meetingsDividerColorRight]
+							dividerColorLeft && dividerColorRight
+								? [dividerColorLeft, dividerColorRight]
 								: DEFAULT_DUOTONE_COLORS
 						}
 						onChange={(newValue) => {
 							if (newValue === undefined || newValue === 'unset') {
 								setAttributes({
-									meetingsDividerColorLeft: 'transparent',
-									meetingsDividerColorRight: 'transparent',
+									dividerColorLeft: 'transparent',
+									dividerColorRight: 'transparent',
 								});
 							} else if (!Array.isArray(newValue) || newValue.length !== 2) {
 								setDuotone(DEFAULT_DUOTONE_COLORS);
 							} else {
 								setAttributes({
-									meetingsDividerColorLeft: newValue[0],
-									meetingsDividerColorRight: newValue[1],
+									dividerColorLeft: newValue[0],
+									dividerColorRight: newValue[1],
 								});
 							}
 						}}
 					/>
 				</>
 			</PanelBody>
-		);
-	}
-
-	function showDeleteMeetingModal() {
-		return (
-			<Modal
-				title="Delete Meeting"
-				onRequestClose={() => setIsModalOpenDelete(false)}
-			>
-				<p>Are you sure you want to delete this meeting?</p>
-				<Button
-					variant="primary"
-					onClick={() => {
-						confirmDelete();
-					}}
-				>
-					Yes, delete.
-				</Button>
-				<Button
-					variant="secondary"
-					onClick={() => setIsModalOpenDelete(false)}
-					style={{ marginLeft: "1em" }}
-				>
-					Cancel
-				</Button>
-			</Modal>
 		);
 	}
 
@@ -516,26 +491,26 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls>
 				{calendarColorsPanel()}
-				{meetingColorsPanel()}
+				{cardColorsPanel()}
 			</InspectorControls>
 			<div {...blockProps}
 				style={{
-					"--base-bg": meetingsBgColor,
-					"--font-selected": meetingsFontColor,
-					"--accent-primary": meetingsDividerColorLeft,
-					"--accent-secondary": meetingsDividerColorRight,
+					"--base-bg": cardBgColor,
+					"--font-selected": cardFontColor,
+					"--accent-primary": dividerColorLeft,
+					"--accent-secondary": dividerColorRight,
 				}}>
 				<div
 				class="card"
 				ref={containerRef}
 				>
-					<div ref={calendarContainerRef} class="api-data-column calendar-container">
-						<CalendarMount
-							containerRef={calendarRef}
-							style={{
+					<div ref={calendarContainerRef} class="api-data-column calendar-container"
+					style={{
 								"--calendar-bg-color": calendarBgColor,
 								"--calendar-font-color": calendarFontColor,
-							}}
+							}}>
+						<CalendarMount
+							containerRef={calendarRef}
 						/>
 						<div>
 							<div class="api-data-date-container">

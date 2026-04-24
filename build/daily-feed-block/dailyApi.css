@@ -138,6 +138,7 @@
 	.api-data-date {
 		float: left;
 		align-items: left;
+		margin-bottom: 1rem;
 	}
 
 	.calendar {

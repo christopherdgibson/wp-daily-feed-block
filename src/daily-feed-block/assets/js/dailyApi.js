@@ -8,19 +8,22 @@ export function fetchDailyApiData(containerRef, date) {
     fetchWithRetry(apiPath)
         .then((jsondta) => {
             const event = jsondta?.data?.Events?.[0];
-            if (!event) {
-                apiDataDiv.innerHTML = "No data found. Try reloading page.";
-                return;
+            if (event) {
+				console.log("jsondta:", jsondta);
+				console.log("jsondta.data:", jsondta.data);
+				apiDataDiv.innerHTML = `
+					<div class="api-data-body">${event.text}</div>
+					<div class="api-data-copyright">${event.html}</div>
+				`;
+			} else {
+				if (jsondta == "Too many requests.") {
+					apiDataDiv.innerHTML = "Too many requests. Please wait at least 30 seconds."
+				} else {
+					apiDataDiv.innerHTML = "No data found. Try reloading page.";
+					return;
+				}
             }
-			console.log("jsondta:", jsondta);
-			console.log("jsondta.data:", jsondta.data);
-            		console.log("events", event);
-            apiDataDiv.innerHTML = `
-                <div class="api-data-body">${event.text}</div>
-                <div class="api-data-copyright">${event.html}</div>
-            `;
-            console.log('apiDataDiv.innerHTML: ', apiDataDiv.innerHTML);
-			
+
             setApiDataDate(containerRef, date);
         })
         .catch((error) => console.error("Error:", error));
@@ -71,9 +74,15 @@ async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
 				}
 				throw new Error(data.message || "API returned success: false");
 			}
+
 			if (!data.data || !data.data.Events) {
-				console.log("data missing expected structure error:", data);
-				throw new Error("API data missing expected structure");
+				if (data[0]?.q && data[0]?.q?.includes("Too many requests. Obtain an auth key for unlimited access")) {
+					console.log("Too many requests: ", data);
+					return "Too many requests.";
+				} else {
+					console.log("data missing expected structure error:", data);
+					throw new Error("API data missing expected structure.");
+				}
 			}
 			return data;
 		} catch (err) {
