@@ -3,7 +3,7 @@ export function fetchDailyApiData(containerRef, date) {
     if (!apiDataDiv) return;
 	const apiUrl = getApiDataUrl(date);
 	console.log("apiUrl:", apiUrl);
-	const apiPath = `/wordpress-6.9/wordpress/wp-admin/admin-ajax.php?action=api_proxy&url=${apiUrl}`;
+	const apiPath = `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
 	
     fetchWithRetry(apiPath)
         .then((jsondta) => {

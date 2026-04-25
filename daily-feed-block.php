@@ -84,6 +84,28 @@ function api_proxy_function() {
     wp_die();
 }
 
+function daily_feed_block_enqueue_editor() {
+    wp_localize_script(
+        'create-block-daily-feed-block-editor-script',
+        'dailyFeedBlock',
+        array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+        )
+    );
+}
+add_action('enqueue_block_editor_assets', 'daily_feed_block_enqueue_editor');
+
+function daily_feed_block_enqueue() {
+    wp_localize_script(
+		'create-block-daily-feed-block-view-script',
+        'dailyFeedBlock',
+        array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+        )
+    );
+}
+add_action('wp_enqueue_scripts', 'daily_feed_block_enqueue');
+
 // add_action( 'wp_enqueue_scripts', 'api_data_enqueue_scripts' );
 // function api_data_enqueue_scripts() {
 // 	 wp_enqueue_script(
