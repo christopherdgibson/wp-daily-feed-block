@@ -8,3 +8,5 @@ module.exports = {
         'daily-feed-block/view': './src/daily-feed-block/view.js',
     }
 };
+
+//MiniCssExtractPlugin for proper css execution?

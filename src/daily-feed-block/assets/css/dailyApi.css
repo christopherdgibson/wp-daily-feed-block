@@ -93,8 +93,22 @@
 	--bg-card-hover-grad: linear-gradient(145deg, var(--bg-card-hover), color-mix(in srgb, var(--bg-card-hover) 90%, white));
 	
 	--card-max-width: 1200px;
-	--card-min-width: 255px;
+	--card-min-width: 250px;
 	--card-min-height: 500px;
+
+	--transition-btn-ui-time: 0.2s;
+	--transition-btn-ui: opacity var(--transition-btn-ui-time) ease,
+		transform var(--transition-btn-ui-time) ease, visibility var(--transition-btn-ui-time);
+	--transition-out-btn-ui: opacity var(--transition-btn-ui-time) ease,
+		transform var(--transition-btn-ui-time) ease, visibility 0s linear 0s;
+
+	#iconGrad stop:first-child {
+		stop-color: var(--accent-primary);
+	}
+
+	#iconGrad stop:last-child {
+		stop-color: var(--accent-secondary);
+	}
 
 	* {
 		&,
@@ -111,15 +125,17 @@
 	float: none;
 	border: none !important;
 	
-	.api-data-column {
+	.card-container {
+		padding: 10px 20px;
 		margin: auto;
-		width: 90%;
+		width: 100%;
 	}
 
 	.api-data-date-container {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
+		margin-bottom: 1rem;
 	}
 
 	.api-data {
@@ -136,9 +152,7 @@
 	}
 
 	.api-data-date {
-		float: left;
-		align-items: left;
-		margin-bottom: 1rem;
+		flex: 1 1 auto;
 	}
 
 	.calendar {
@@ -155,8 +169,10 @@
 		display: none;
 	}
 
-	#check-calendar {
-		display: none;
+	.calendar-icon {
+		width: 48px;
+		height: 48px;
+		position: relative
 	}
 
 	.card {
@@ -185,25 +201,25 @@
 			word-break: break-word; */
 		}
 
-		.meeting-icon {
-			grid-area: icon;
-			font-size: 3rem;
+		.tool-tip {
+			display: grid;
+			opacity: 0;
+			visibility: hidden;
+			width: max-content;
+			position: absolute;
+			padding: 5px;
+			background-color: white;
+			outline: solid 1px currentColor;
+			border-radius: 6px;
+			justify-items: left;
+			gap: 10px;
+			right: 0;
+			bottom: calc(100% + 6px);
+			font-size: 16px;
+			z-index: 1;
+			transition: var(--transition-btn-ui);
+		}
 
-			> i {
-				color: transparent;
-				background: linear-gradient(to bottom right, var(--grad));
-				background-clip: text;
-			}
-		}
-		.meeting-title {
-			grid-area: content;
-			& > *:first-child {
-				margin-top: 0rem;
-			}
-			& > *:last-child {
-				margin-bottom: 0rem;
-			}
-		}
 		&::after {
 			content: "";
 			grid-area: bar;
@@ -211,16 +227,7 @@
 			background-image: var(--divider-bar-grad);
 			border-radius: 1px;
 		}
-		.meeting-title-small {
-			grid-area: content;
-			color: var(--font-subtle);
-			& > *:first-child {
-				margin-top: 0rem;
-			}
-			& > *:last-child {
-				margin-bottom: 0rem;
-			}
-		}
+
 		&:hover {
 			background-image: var(--bg-card-hover-grad);
 		}
@@ -232,50 +239,131 @@
 		opacity: 75%;
 	}
 
-	@media (max-width: 768px) {
-		.checkbtn-calendar {
-			display: block;
-			order: 1;
-			margin-right: 20px;
+	.btn-calendar-toggle {
+		display: none;
+		background: none;
+		border: none;
+		padding: 0;
+		align-items: center;
+
+		&:hover .tool-tip {
+			opacity: 1;
+			visibility: visible;
+			transition: var(--transition-out-btn-ui);
 		}
-		/* .api-data-container {
-      flex-direction: column;
-    } */
-		.calendar {
+	}
+
+	.calendar-overlay {
+			.close-popup {
 			display: none;
+			height: 50px;
+			width: 50px;
+			border-radius: 10px;
+			font-size: 24px;
+			background: var(--wp-components-color-accent, #cc1818);
+			border: none;
+			color: var(--wp-components-color-accent-inverted, #fff);
 		}
-		.api-data-column {
-			width: 90%;
-			margin: auto;
+	}
+
+	@media (max-width: 400px) {
+		.card-container {
+			padding: 0;
+			margin: 0;
 		}
 
-		ul {
-			position: fixed;
-			top: 80px;
-			right: -100%;
-			background-color: rgb(0, 0, 127);
-			width: 100%;
-			height: 100vh;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			transition: all 0.3s;
-			li {
-				position: relative;
-				margin: 20px 0;
-				width: calc(100%);
-				a {
-					font-size: 20px;
-					width: calc(100%);
-					justify-content: center;
+		.calendar-overlay.expanded .calendar-container {
+		.close-popup {
+			width: 40px;
+			height: 40px;
+			font-size: 18px;
+		}
+
+		.calendar {
+			min-width: 300px;
+			width: auto;
+			padding: 0;
+			
+			.calendar-inner {
+				/* padding: 0; */
+
+				.calendar-body div {
+					padding: 0
 				}
 			}
 		}
+	}
+}
 
-		/* #check:checked ~ ul {
-      right: 0;
-      align-content: center;
-    } */
+	@media (max-width: 768px) {
+
+		.btn-calendar-toggle {
+			cursor: pointer;
+			display: flex;
+		}
+
+		.api-data-column {
+			display: flex;
+			flex-direction: column;
+		}
+
+		@media (min-width: 400px) {
+			.card-container {
+				padding: 10px;
+				margin: 0;
+			}
+		}
+
+		.calendar-overlay {
+			display: none;
+			cursor: default;
+			align-items: center;
+			justify-content: center;
+			justify-items: center;
+			position: fixed;
+			z-index: 10;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+
+			.calendar-container {
+				width: min-content;
+				height: min-content;
+				transform: translateY(-50px);
+				z-index: 11;
+			}
+
+			.calendar {
+				display: grid;
+				justify-self: center;
+				width: 75%;
+				margin: auto;
+				z-index: 10;
+			}
+
+			.close-popup {
+				display: block;
+				cursor: pointer;
+				margin-left: auto;
+				margin-bottom: 20px;
+				&:hover {
+					background-color: var(--wp-components-color-accent-darker-10, #9e1313);
+					/* transform: translateY(-1px); */
+  					box-shadow: inset -1px 1px 0 rgba(255, 255, 255, 0.7), 0 8px 20px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+					padding-bottom: 1px;
+				}
+			}
+
+			/* &.expanded {
+				display: grid;
+			} */
+		}
+
+		.calendar-overlay.expanded {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 }

@@ -18,36 +18,49 @@ $calendarStyles = implode(';', [
 ]);
 ?>
 <div class='api-data-container' <?php echo get_block_wrapper_attributes(['style' => $cardStyles]); ?>>
+    <svg width="0" height="0">
+        <defs>
+            <linearGradient id="iconGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--accent-primary)" />
+                <stop offset="100%" stopColor="var(--accent-secondary)" />
+            </linearGradient>
+        </defs>
+    </svg>
     <div class="card">
-        <div class="api-data-column calendar-container">
-            <div class="calendar"
-                style="
-                    --calendar-bg-color: <?php echo esc_attr($calendar_bg); ?>;
-                    --calendar-font-color: <?php echo esc_attr($calendar_font); ?>;">
-            </div>
-            <div>
-                <div class="api-data-date-container">
-                    <div>
-                        <input type="checkbox" id="check-calendar" />
-                        <label for="check-calendar" class="checkbtn-calendar">
-                            <svg
-                                width="40"
-                                height="40"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewbox="0 -50 448 512"
-                            >
-                                <path
-                                    fill="black"
-                                    d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"
-                                />
-                            </svg>
-                        </label>
-                    </div>
-                    <div class="api-data-date">
-                        Daily api for January 1
+        <div class="card-container">
+            <div class="calendar-overlay">
+                <div class="calendar-container">
+                    <button class="close-popup">
+                        X
+                    </button>
+                    <div class="calendar"
+                        style="
+                            --calendar-bg-color: <?php echo esc_attr($calendar_bg); ?>;
+                            --calendar-font-color: <?php echo esc_attr($calendar_font); ?>;">
                     </div>
                 </div>
-                <div class="api-data">
+            </div>
+            <div class="api-data-column">
+                <div class="api-data-date-container">
+                    <div class="api-data-date">
+                        Daily feed for 1 January
+                    </div>
+                    <button class="btn-calendar-toggle">
+                        <div class="calendar-icon">
+                            <span class="tool-tip">Open calendar to choose date</span>
+                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                <g fill="url(#iconGrad)">
+                                    <path d="M24,29H8a5,5,0,0,1-5-5V10A5,5,0,0,1,8,5H24a5,5,0,0,1,5,5V24A5,5,0,0,1,24,29ZM8,7a3,3,0,0,0-3,3V24a3,3,0,0,0,3,3H24a3,3,0,0,0,3-3V10a3,3,0,0,0-3-3Z" />
+                                    <path d="M24,25H20a1,1,0,0,1-1-1V20a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v4A1,1,0,0,1,24,25Zm-3-2h2V21H21Z" />
+                                    <path d="M28,13H4a1,1,0,0,1,0-2H28a1,1,0,0,1,0,2Z" />
+                                    <path d="M11,9a1,1,0,0,1-1-1V4a1,1,0,0,1,2,0V8A1,1,0,0,1,11,9Z" />
+                                    <path d="M21,9a1,1,0,0,1-1-1V4a1,1,0,0,1,2,0V8A1,1,0,0,1,21,9Z" />
+                                </g>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+                <div class="api-data" ref={apiDataRef}>
                     Loading api data...
                 </div>
             </div>
