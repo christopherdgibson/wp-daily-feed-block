@@ -18,6 +18,10 @@ return array(
 			
 		),
 		'attributes' => array(
+			'align' => array(
+				'type' => 'string',
+				'default' => 'wide'
+			),
 			'calendarBgColor' => array(
 				'type' => 'string',
 				'default' => '#262829'

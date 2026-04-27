@@ -121,10 +121,19 @@
 	background: var(--bg-meetings-radial);
 	border-radius: 18px;
 	padding: 1.5rem;
-	
 	float: none;
 	border: none !important;
+
+	@media (min-width: 840px) {
+		min-width: min(840px, 100% - 100px);
+	}
 	
+	&.alignwide {
+		max-width: var(--card-max-width) !important;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
 	.card-container {
 		padding: 10px 20px;
 		margin: auto;
@@ -178,8 +187,6 @@
 	.card {
 		background-image: var(--bg-card-grad);
 		min-width: var(--card-min-width);
-		max-width: var(--card-max-width);
-		/* min-height: 0; */
 		min-height: var(--card-min-height);
 		border-radius: 10px;
 

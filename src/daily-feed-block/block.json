@@ -13,6 +13,10 @@
 	"licenseURI": "https://www.gnu.org/licenses/gpl-2.0.html",
 	"example": {},
 	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "wide"
+    	},
 		"calendarBgColor": {
 			"type": "string",
 			"default": "#262829"
