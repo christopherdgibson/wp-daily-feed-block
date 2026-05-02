@@ -4,16 +4,21 @@ export function fetchDailyApiData(containerRef, date) {
 	const apiUrl = getApiDataUrl(date);
 	console.log("apiUrl:", apiUrl);
 	const apiPath = `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
-	
+
+	const mapEvent = (data) => ({
+		body: data.Events?.[0]?.text,
+		reference: data.Events?.[0]?.html
+	});
+
     fetchWithRetry(apiPath)
-        .then((jsondta) => {
-            const event = jsondta?.data?.Events?.[0];
-            if (event) {
+		.then((jsondta) => {
+			const { body, reference } = mapEvent(jsondta?.data);
+			if (body) {
 				console.log("jsondta:", jsondta);
 				console.log("jsondta.data:", jsondta.data);
 				apiDataDiv.innerHTML = `
-					<div class="api-data-body">${event.text}</div>
-					<div class="api-data-copyright">${event.html}</div>
+					<div class="api-data-body">${body}</div>
+					<div class="api-data-copyright">${reference}</div>
 				`;
 			} else {
 				if (jsondta == "Too many requests.") {
