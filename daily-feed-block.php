@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Daily Feed Block
  * Plugin URI: https://christopherdgibson.github.io/wordpress-plugins
- * Description: Block for adding agenda items and their descriptions.
+ * Description: A daily API display block with calendar navigation.
  * Author: Christopher D Gibson
  * Author URI: https://christopherdgibson.github.io
  * Version: 0.1.0
@@ -84,6 +84,7 @@ function api_proxy_function() {
     wp_die();
 }
 
+add_action('enqueue_block_editor_assets', 'daily_feed_block_enqueue_editor');
 function daily_feed_block_enqueue_editor() {
     wp_localize_script(
         'create-block-daily-feed-block-editor-script',
@@ -93,8 +94,8 @@ function daily_feed_block_enqueue_editor() {
         )
     );
 }
-add_action('enqueue_block_editor_assets', 'daily_feed_block_enqueue_editor');
 
+add_action('wp_enqueue_scripts', 'daily_feed_block_enqueue');
 function daily_feed_block_enqueue() {
     wp_localize_script(
 		'create-block-daily-feed-block-view-script',
@@ -104,7 +105,6 @@ function daily_feed_block_enqueue() {
         )
     );
 }
-add_action('wp_enqueue_scripts', 'daily_feed_block_enqueue');
 
 // add_action( 'wp_enqueue_scripts', 'api_data_enqueue_scripts' );
 // function api_data_enqueue_scripts() {

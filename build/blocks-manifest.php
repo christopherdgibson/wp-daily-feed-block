@@ -9,7 +9,7 @@ return array(
 		'title' => 'Daily Feed Block',
 		'author' => 'Christopher D Gibson',
 		'authorURI' => 'https://christopherdgibson.github.io',
-		'description' => 'A daily API display block with calendar navigation..',
+		'description' => 'A daily API display block with calendar navigation.',
 		'category' => 'widgets',
 		'icon' => 'rss',
 		'license' => 'GPL-2.0-or-later',
@@ -38,11 +38,11 @@ return array(
 				'type' => 'string',
 				'default' => '#0d3ca1'
 			),
-			'dividerColorLeft' => array(
+			'gradientColorLeft' => array(
 				'type' => 'string',
 				'default' => '#0000FF'
 			),
-			'dividerColorRight' => array(
+			'gradientColorRight' => array(
 				'type' => 'string',
 				'default' => '#FFA500'
 			)

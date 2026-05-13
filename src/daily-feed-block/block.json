@@ -6,7 +6,7 @@
 	"title": "Daily Feed Block",
 	"author": "Christopher D Gibson",
 	"authorURI": "https://christopherdgibson.github.io",
-	"description": "A daily API display block with calendar navigation..",
+	"description": "A daily API display block with calendar navigation.",
 	"category": "widgets",
 	"icon": "rss",
 	"license": "GPL-2.0-or-later",
@@ -33,11 +33,11 @@
 			"type": "string",
 			"default": "#0d3ca1"
 		},
-		"dividerColorLeft": {
+		"gradientColorLeft": {
 			"type": "string",
 			"default": "#0000FF"
 		},
-		"dividerColorRight": {
+		"gradientColorRight": {
 			"type": "string",
 			"default": "#FFA500"
 		}

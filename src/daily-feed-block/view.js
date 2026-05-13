@@ -1,5 +1,5 @@
 import { CalendarControl } from "./assets/js/calendar.js";
-import { fetchDailyApiData } from "./assets/js/dailyApi.js";
+import { populateDailyApiData } from "./assets/js/dailyApi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const calendarCard = document.querySelector('.api-data-container .card');
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Set calendar events
     const instance = new CalendarControl(calendarContainer);
     instance.setOnDateChange((date) => {
-        fetchDailyApiData(calendarCard, date);
+        populateDailyApiData(calendarCard, date, true);
     });
     
     // Set mobile pop-up events

@@ -1,37 +1,100 @@
-export function fetchDailyApiData(containerRef, date) {
-    const apiDataDiv = containerRef.querySelector(".api-data");
+export async function populateDailyApiData(containerRef, date, updateDate = true, eventKey = "Events") {
+	const apiDataDiv = containerRef.querySelector(".api-data");
     if (!apiDataDiv) return;
-	const apiUrl = getApiDataUrl(date);
-	console.log("apiUrl:", apiUrl);
-	const apiPath = `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
+	const result = await fetchDailyApiData(date, eventKey);
+	if (result.success) {
+		apiDataDiv.innerHTML = `
+			<div class="api-data-body">${result.body}</div>
+			<div class="api-data-copyright">${result.reference}</div>
+		`;
+    } else {
+		apiDataDiv.innerHTML = result.error;
+		// setApiError(result.error);
+		if (result.skipDate) {
+			return; // Do not set date 
+		}
+    }
+	if (updateDate) {
+		setApiDataDate(containerRef, date);
+	}
+}
 
-	const mapEvent = (data) => ({
-		body: data.Events?.[0]?.text,
-		reference: data.Events?.[0]?.html
+async function fetchDailyApiData(date, eventKey = "Events") {
+	// if (no proxy) // for additional parameter to select proxy, otw try catch try proxy
+	// const apiUrl = getApiUrl(date);
+	// console.log("apiUrl:", apiUrl);
+
+	const proxyPath = getProxyUrl(date);
+
+	const mapResponse = (data, key) => ({
+		body: data?.[key]?.[0]?.text,
+		reference: data?.[key]?.[0]?.html
 	});
 
-    fetchWithRetry(apiPath)
+    return fetchWithRetry(proxyPath)
 		.then((jsondta) => {
-			const { body, reference } = mapEvent(jsondta?.data);
+			const { body, reference } = mapResponse(jsondta?.data, eventKey);
 			if (body) {
-				console.log("jsondta:", jsondta);
 				console.log("jsondta.data:", jsondta.data);
-				apiDataDiv.innerHTML = `
-					<div class="api-data-body">${body}</div>
-					<div class="api-data-copyright">${reference}</div>
-				`;
+				return { success: true, body: body, reference: reference };
 			} else {
 				if (jsondta == "Too many requests.") {
-					apiDataDiv.innerHTML = "Too many requests. Please wait at least 30 seconds."
+					return { success: false, skipDate: false, error: "Too many requests. Please wait at least 30 seconds." };
 				} else {
-					apiDataDiv.innerHTML = "No data found. Try reloading page.";
-					return;
+					return { success: false, skipDate: false, error: "No data found. Try reloading page." };
 				}
-            }
+			}
+		})
+		.catch((error) => {
+			console.error("Error:", error);
+			return { success: false, skipDate: true, error: "An unexpected error occurred." };
+		});
+}
 
-            setApiDataDate(containerRef, date);
-        })
-        .catch((error) => console.error("Error:", error));
+export async function refreshRawJsonData(rawJsonRef, date) {
+    if (!rawJsonRef) return;
+
+	rawJsonRef.innerHTML = "Loading raw data...";
+	const proxyPath = getProxyUrl(date);
+	fetchWithRetry(proxyPath)
+		.then((jsondta) => {
+			rawJsonRef.innerHTML = renderValueCollapsible(jsondta);
+		})
+}
+
+function renderValueRecursive(val) {
+  if (val === null) return `<span class="null">null</span>`;
+  if (typeof val !== 'object') return `<span>${val}</span>`;
+
+  if (Array.isArray(val)) {
+    return `<ul>${val.map(item => `<li>${renderValueRecursive(item)}</li>`).join('')}</ul>`;
+  }
+
+  // Plain object
+  return `<dl>
+    ${Object.entries(val).map(([k, v]) =>
+      `<dt><b>${k}</b></dt><dd>${renderValueRecursive(v)}</dd>`
+    ).join('')}
+  </dl>`;
+}
+
+function renderValueCollapsible(val, key = '') {
+  if (val === null || typeof val !== 'object') {
+    return `${key ? `<b>${key}:</b> ` : ''}${val}`;
+  }
+
+  const entries = Array.isArray(val)
+    ? val.map((v, i) => renderValueCollapsible(v, i))
+    : Object.entries(val).map(([k, v]) => renderValueCollapsible(v, k));
+
+  const label = key
+    ? `${key} (${Array.isArray(val) ? `${val.length} items` : 'object'})`
+    : 'root';
+
+  return `<details open>
+    <summary>${label}</summary>
+    <div style="padding-left:1em">${entries.join('<br>')}</div>
+  </details>`;
 }
 
 function setApiDataDate(containerRef, date) {
@@ -41,13 +104,18 @@ function setApiDataDate(containerRef, date) {
 	console.log("api data date element:", apiDataDate);
 }
 
-function getApiDataUrl(date, padded = true) {
+function getApiUrl(date, padded = true) {
 	let day = date.getDate();
 	if (padded == true && day < 10) {
 		day = "0" + day;
 	}
 	let month = date.getMonth() + 1;
 	return `https://today.zenquotes.io/api/${month}/${day}`;
+}
+
+function getProxyUrl(date, padded = true) {
+	const apiUrl = getApiUrl(date, padded);
+	return `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
 }
 
 function fetchJsonAsync(url) {
