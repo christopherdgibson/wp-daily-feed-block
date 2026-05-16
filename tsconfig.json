@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "strict": true,
+        "allowJs": true,
+        "noEmit": true,
+        "resolveJsonModule": true,
+        "noUnusedLocals": true,
+        "paths": {
+        "@components/*": ["./src/daily-feed-block/components/*"],
+        "@daily-feed-block/*": ["./src/daily-feed-block/*"],
+        "@daily-feed-block/types": ["./src/daily-feed-block/types.ts"],
+        "@daily-feed-block/constants": ["./src/daily-feed-block/constants.json"]
+        }
+    },
+    "include": [
+    "./src/daily-feed-block/**/*.ts",
+    "./src/daily-feed-block/**/*.tsx", "src/daily-feed-block/components/ui-panels/CustomColorsPanel/index.tsx", "src/daily-feed-block/components/ui-panels/CardColorsPanel/index.tsx", "src/daily-feed-block/edit.js",
+  ]
+}

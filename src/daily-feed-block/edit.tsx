@@ -1,69 +1,48 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
 import { __ } from "@wordpress/i18n";
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
 import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
-import {
-	Button,
-	SegmentedControl,
-} from "@wordpress/components";
-
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
-// import "./editor.scss";
+import { memo } from "react";
+import type { RefObject} from 'react';
 
 import './assets/css/dailyApi.css';
 import './assets/css/calendar.css';
 import { CalendarControl } from "./assets/js/calendar.js";
 import { refreshRawJsonData, populateDailyApiData } from "./assets/js/dailyApi.js";
 import { useRef, useEffect, useState } from "@wordpress/element";
+import type { EditProps, ThemeStyles } from "@daily-feed-block/types";
+
+
 import CalendarColorsPanel from "@components/ui-panels/CalendarColorsPanel";
 import CardColorsPanel from "@components/ui-panels/CardColorsPanel";
 
-const CalendarMount = React.memo(
-    ({ containerRef, style }) => (
-        <div ref={containerRef} class="calendar" style={style}></div>
+interface CalendarMountProps {
+    containerRef: RefObject<HTMLDivElement>;
+    style?: React.CSSProperties;
+}
+
+const CalendarMount = memo(
+    ({ containerRef, style }: CalendarMountProps) => (
+        <div ref={containerRef} className="calendar" style={style}></div>
     ),
 	() => true
     // (prevProps, nextProps) => prevProps.style.display === nextProps.style.display
 );
 
-/**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @return {Element} Element to render.
- */
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes }: EditProps): JSX.Element {
 	const { calendarBgColor, calendarFontColor, cardBgColor, cardFontColor, gradientColorLeft, gradientColorRight } =
     attributes;
 
-	const [calendarInstance, setCalendarInstance] = useState(null);
+	const [calendarInstance, setCalendarInstance] = useState<CalendarControl | null>(null);
 	const blockProps = useBlockProps({ className: "api-data-container" });
 
-	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-	const containerRef = useRef();
-	const apiDataRef = useRef();
-	const calendarContainerRef = useRef();
-	const rawJsonRef = useRef();
-	const calendarRef = useRef();
-	const [selectedDate, setSelectedDate] = useState(new Date());
-	const [isRawExpanded, setIsRawExpanded] = useState(false);
+	const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const apiDataRef = useRef<HTMLDivElement>(null);
+	const calendarContainerRef = useRef<HTMLDivElement>(null);
+	const rawJsonRef = useRef<HTMLDivElement>(null);
+	const calendarRef = useRef<HTMLDivElement>(null);
+	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+	const [isRawExpanded, setIsRawExpanded] = useState<boolean>(false);
 
 	useEffect(() => {
     // prime the proxy with a cheap request on mount
@@ -76,7 +55,7 @@ export default function Edit({ attributes, setAttributes }) {
 	useEffect(() => {
     if (!calendarInstance && calendarContainerRef.current) {
         const instance = new CalendarControl(calendarContainerRef.current);
-        instance.setOnDateChange((date) => {
+        instance.setOnDateChange((date: Date) => {
             populateDailyApiData(containerRef.current, date);
 			setSelectedDate(date);
         });
@@ -84,17 +63,8 @@ export default function Edit({ attributes, setAttributes }) {
     }
 	}, [calendarInstance]);
 
-	// const currentDate = new Date();
-	// const currentDay = currentDate.getDate().toString();
-	// const currentMonth = currentDate.toLocaleString("default", { month: "long" });
 	const currentDay = selectedDate.getDate().toString();
 	const currentMonth = selectedDate.toLocaleString("default", { month: "long" });
-
-	function DailyApi() {
-		return (
-			null
-		);
-	}
 
 	return (
 		<>
@@ -118,7 +88,7 @@ export default function Edit({ attributes, setAttributes }) {
 					"--font-selected": cardFontColor,
 					"--accent-primary": gradientColorLeft,
 					"--accent-secondary": gradientColorRight,
-				}}>
+				} as ThemeStyles}>
 					<svg width="0" height="0" style={{ position: "absolute" }}>
 						<defs>
 							<linearGradient id="iconGrad" x1="0" y1="0" x2="1" y2="1">
@@ -128,22 +98,22 @@ export default function Edit({ attributes, setAttributes }) {
 						</defs>
 					</svg>
 				<div
-				class="card"
+				className="card"
 				ref={containerRef}
 				>
 					<div className="card-container">
-						<div class={`calendar-overlay${isCalendarOpen ? " expanded" : ""}`}
+						<div className={`calendar-overlay${isCalendarOpen ? " expanded" : ""}`}
 								onClick={(e) => {
-										 if (!calendarRef.current.contains(e.target))
+										 if (calendarRef?.current !== null && !calendarRef.current.contains(e.target as Node))
 											setIsCalendarOpen(false);
 										}}>
-							<div ref={calendarContainerRef} class="calendar-container"
+							<div ref={calendarContainerRef} className="calendar-container"
 								style={{
 										"--calendar-bg-color": calendarBgColor,
 										"--calendar-font-color": calendarFontColor,
-									}}>
+									} as React.CSSProperties}>
 								
-									<button class="close-popup">
+									<button className="close-popup">
 										X
 									</button>
 									<CalendarMount
@@ -152,8 +122,8 @@ export default function Edit({ attributes, setAttributes }) {
 							</div>
 						</div>
 						<div className="api-data-column">
-							<div class="api-data-date-container">
-								<div class="api-data-date">
+							<div className="api-data-date-container">
+								<div className="api-data-date">
 									Daily feed for {currentDay} {currentMonth}
 								</div>
 								<button className="btn-calendar-toggle"
@@ -163,7 +133,7 @@ export default function Edit({ attributes, setAttributes }) {
 										e.stopPropagation();
 									}}
 								>
-									<div class="calendar-icon">
+									<div className="calendar-icon">
 										<span className="tool-tip">Open calendar to choose date</span>
 										<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
 											<g fill="url(#iconGrad)">
@@ -177,7 +147,7 @@ export default function Edit({ attributes, setAttributes }) {
 									</div>
 								</button>
 							</div>
-							<div class="api-data" ref={apiDataRef}>
+							<div className="api-data" ref={apiDataRef}>
 								Loading api data...
 							</div>
 						</div>

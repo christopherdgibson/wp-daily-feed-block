@@ -4,13 +4,9 @@
 	"name": "create-block/daily-feed-block",
 	"version": "0.1.0",
 	"title": "Daily Feed Block",
-	"author": "Christopher D Gibson",
-	"authorURI": "https://christopherdgibson.github.io",
 	"description": "A daily API display block with calendar navigation.",
 	"category": "widgets",
 	"icon": "rss",
-	"license": "GPL-2.0-or-later",
-	"licenseURI": "https://www.gnu.org/licenses/gpl-2.0.html",
 	"example": {},
 	"attributes": {
 		"align": {
