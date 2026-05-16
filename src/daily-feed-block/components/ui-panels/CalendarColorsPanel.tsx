@@ -1,4 +1,5 @@
 import { Button, ButtonGroup, ColorPicker, Modal, PanelBody } from "@wordpress/components";
+import type { EditProps } from "@daily-feed-block/types";
 import { useState } from "@wordpress/element";
 import TabButton from "./TabButton";
 
@@ -7,7 +8,7 @@ import constants from "@daily-feed-block/constants.json";
 const DEFAULT_CAL_BG_COLOR = constants.calendarDefaults.calendarBgColor;
 const DEFAULT_CAL_FONT_COLOR = constants.calendarDefaults.calendarFontColor;
 
-export default function CalendarColorsPanel({ attributes, setAttributes })  {
+export default function CalendarColorsPanel({ attributes, setAttributes }: EditProps)  {
     const { calendarBgColor, calendarFontColor } = attributes;
     const [activeTab, setActiveTab] = useState("background");
 	const [isModalOpenDefaultCalendar, setIsModalOpenDefaultCalendar] = useState(false);
@@ -37,19 +38,19 @@ export default function CalendarColorsPanel({ attributes, setAttributes })  {
             {activeTab === "background" && (
                 <ColorPicker
                     color={calendarBgColor}
-                    onChangeComplete={(value) =>
-                        setAttributes({ calendarBgColor: value.hex })
+                    onChange={(hex: string) =>
+                        setAttributes({ calendarBgColor: hex })
                     }
-                    disableAlpha
+                    enableAlpha={false}
                 />
             )}
             {activeTab === "text" && (
                 <ColorPicker
                     color={calendarFontColor}
-                    onChangeComplete={(value) =>
-                        setAttributes({ calendarFontColor: value.hex })
+                    onChange={(hex: string) =>
+                        setAttributes({ calendarFontColor: hex })
                     }
-                    disableAlpha
+                    enableAlpha={false}
                 />
             )}
             {activeTab === "defaults" && (

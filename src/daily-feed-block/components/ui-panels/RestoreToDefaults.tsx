@@ -1,14 +1,15 @@
 import { Button, Modal } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 
-import constants from "@daily-feed-block/constants.json";
+import type { SetAttributesProps } from "@daily-feed-block/types";
+import constants from "@daily-feed-block/constants";
 
 const DEFAULT_GRADIENT_LEFT = constants.themePresets.default.gradientColorLeft;
 const DEFAULT_GRADIENT_RIGHT = constants.themePresets.default.gradientColorRight;
 const DEFAULT_BG_COLOR = constants.themePresets.default.cardBgColor;
 const DEFAULT_FONT_COLOR = constants.themePresets.default.cardFontColor;
 
-export default function RestoreToDefaults({setAttributes}) {
+export default function RestoreToDefaults({setAttributes}: SetAttributesProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
