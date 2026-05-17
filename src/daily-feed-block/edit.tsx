@@ -6,7 +6,7 @@ import type { RefObject} from 'react';
 
 import './assets/css/dailyApi.css';
 import './assets/css/calendar.css';
-import { CalendarControl } from "./assets/js/calendar.js";
+import { CalendarControl } from "./assets/js/calendar";
 import { refreshRawJsonData, populateDailyApiData } from "./assets/js/dailyApi.js";
 import { useRef, useEffect, useState } from "@wordpress/element";
 import type { EditProps, ThemeStyles } from "@daily-feed-block/types";

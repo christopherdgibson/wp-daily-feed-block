@@ -1,43 +1,76 @@
-//check the console for date click event
-//Fixed day highlight
-//Added previous month and next month view
+interface CalendarControlState {
+    localDate: Date;
+    prevMonthLastDayNum: number | null;
+    calWeekDays: string[];
+	calMonthName: string[];
+    daysInMonth: (month: number, year: number) => number;
+    firstDate: () => Date;
+    lastDate: () => Date;
+    firstDateNumber: () => number;
+    lastDayNumber: () => number;
+    getPreviousMonthLastDateNum: () => number;
+    navigateToPreviousMonth: () => void;
+    navigateToNextMonth: () => void;
+    navigateToCurrentMonth: () => void;
+    displayYear: () => void;
+    displayMonth: () => void;
+    selectDate: (e: Event) => void;
+    plotSelectors: () => void;
+    plotDayNames: () => void;
+    plotDates: () => void;
+    attachEvents: () => void;
+    highlightToday: () => void;
+    outlineSelected: (day: number) => void;
+    plotPrevMonthDates: (dates: number[]) => void;
+    plotNextMonthDates: () => void;
+    loopThroughNextDays: (count: number) => void;
+    attachEventsOnNextPrev: () => void;
+    init: () => void;
+}
 
-export class CalendarControl {
-	constructor(calendarContainerRef) {
-		this.calendarContainerRef = calendarContainerRef;
+interface ICalendarControl {
+    handleDateChange(date: Date): void;
+    setOnDateChange(callback: ((date: Date) => void) | null): void;
+    getActiveDate(): Date;
+}
+
+
+export class CalendarControl implements ICalendarControl {
+	// private calendarContainerRef: HTMLDivElement;
+    private selectedDate: Date;
+    private onDateChange: ((date: Date) => void) | null = null;
+
+	constructor(container: HTMLDivElement) {
+		// this.calendarContainerRef = container;
 		this.selectedDate = new Date();
-		// this.onDateChange = null;
-		//console.log("createCalendarControl constructor initialised");
-		createCalendarControl(calendarContainerRef, this.handleDateChange.bind(this));
+		createCalendarControl(container, this.handleDateChange.bind(this));
 	}
-
-	handleDateChange(date) {
+	handleDateChange(date: Date) : void {
 		console.log("Date cell clicked");
 		this.selectedDate = date;
 		if (this.onDateChange) {
 			this.onDateChange(this.selectedDate);
 		}
 	}
-
-	setOnDateChange(callback) {
+	setOnDateChange(callback: ((date: Date) => void) | null) : void {
 		this.onDateChange = callback;
 		if (this.onDateChange) {
 			this.onDateChange(this.selectedDate);
 		}
 	}
-
-	getActiveDate() {
+	getActiveDate() : Date {
 		console.log("Active date:", this.selectedDate);
 		return this.selectedDate;
 	}
 }
 
-export function createCalendarControl(calendarContainerRef, onDateChange) {
-	const calendarRef = calendarContainerRef.querySelector('.calendar');
+export function createCalendarControl(calendarContainerRef: HTMLDivElement, onDateChange: ((date: Date) => void) | null = null) {
+	const calendarRef = calendarContainerRef.querySelector('.calendar') as HTMLDivElement;
 	const calendar = new Date();
-	const calendarControl = {
+	const calendarControl: CalendarControlState = {
+	// const calendarControl = {
 		localDate: new Date(),
-		prevMonthLastDate: null,
+		prevMonthLastDayNum: null as number | null,
 		calWeekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 		calMonthName: [
 			"January",
@@ -53,28 +86,28 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 			"November",
 			"December",
 		],
-		daysInMonth: function (month, year) {
+		daysInMonth: function (month: number, year: number) {
 			return new Date(year, month, 0).getDate();
 		},
-		firstDay: function () {
+		firstDate: function () {
 			return new Date(calendar.getFullYear(), calendar.getMonth(), 1);
 		},
-		lastDay: function () {
+		lastDate: function () {
 			return new Date(calendar.getFullYear(), calendar.getMonth() + 1, 0);
 		},
-		firstDayNumber: function () {
-			return calendarControl.firstDay().getDay() + 1;
+		firstDateNumber: function () {
+			return calendarControl.firstDate().getDay() + 1;
 		},
 		lastDayNumber: function () {
-			return calendarControl.lastDay().getDay() + 1;
+			return calendarControl.lastDate().getDay() + 1;
 		},
-		getPreviousMonthLastDate: function () {
-			let lastDate = new Date(
+		getPreviousMonthLastDateNum: function () {
+			let lastDayNum = new Date(
 				calendar.getFullYear(),
 				calendar.getMonth(),
 				0,
 			).getDate();
-			return lastDate;
+			return lastDayNum;
 		},
 		navigateToPreviousMonth: function () {
 			calendar.setMonth(calendar.getMonth() - 1);
@@ -88,32 +121,35 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 			let currentMonth = calendarControl.localDate.getMonth();
 			let currentYear = calendarControl.localDate.getFullYear();
 			calendar.setMonth(currentMonth);
-			calendar.setYear(currentYear);
+			calendar.setFullYear(currentYear);
 			calendarControl.attachEventsOnNextPrev();
 		},
 		displayYear: function () {
-			let yearLabel = calendarRef.querySelector(".calendar-year-label");
-			yearLabel.innerHTML = calendar.getFullYear();
+			let yearLabel = calendarRef.querySelector(".calendar-year-label") as HTMLDivElement;
+			yearLabel.innerHTML = calendar.getFullYear().toString();
 		},
 		displayMonth: function () {
-			let monthLabel = calendarRef.querySelector(".calendar-month-label");
+			let monthLabel = calendarRef.querySelector(".calendar-month-label") as HTMLDivElement;
 			monthLabel.innerHTML = calendarControl.calMonthName[calendar.getMonth()];
 		},
-		selectDate: function (e) {
+		selectDate: function (e: Event) {
 			e.preventDefault();
-			const day = parseInt(e.target.textContent, 10);
+			const dateLink = (e.target as Element).closest(".dateNumber");
+			if (dateLink == null) return;
+			const day = parseInt(dateLink?.textContent ?? "", 10);
+			if (isNaN(day)) return;
 			const month = calendar.getMonth();
 			const year = calendar.getFullYear();
 			const selectedDate = new Date(year, month, day);
 			if (onDateChange) {
 				onDateChange(selectedDate);
 			}
-			console.log(
-				`inside create block: ${e.target.textContent} ${
-					calendarControl.calMonthName[calendar.getMonth()]
-				} ${calendar.getFullYear()}`,
-			);
-			calendarControl.outlineSelected(e.target.textContent);
+			// console.log(
+			// 	`inside create block: ${e.target.textContent} ${
+			// 		calendarControl.calMonthName[calendar.getMonth()]
+			// 	} ${calendar.getFullYear()}`,
+			// );
+			calendarControl.outlineSelected(day);
 		},
 		plotSelectors: function () {
 			// calendarRef.innerHTML += 
@@ -130,60 +166,48 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
             ${calendarControl.calWeekDays[calendarControl.localDate.getDay()]},
             ${calendarControl.localDate.getDate()},
             ${
-							calendarControl.calMonthName[calendarControl.localDate.getMonth()]
-						}
+				calendarControl.calMonthName[calendarControl.localDate.getMonth()]
+			}
             ${calendarControl.localDate.getFullYear()}
           </div>
           <div class="calendar-body"></div></div>`);
 		},
 		plotDayNames: function () {
 			for (let i = 0; i < calendarControl.calWeekDays.length; i++) {
-				calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+				calendarRef.querySelector(".calendar-body")?.insertAdjacentHTML('beforeend',
 					`<div>${calendarControl.calWeekDays[i]}</div>`);
-				// calendarRef.querySelector(
-				// 	".calendar-body",
-				// ).innerHTML += `<div>${calendarControl.calWeekDays[i]}</div>`;
 			}
 		},
 		plotDates: function () {
-			calendarRef.querySelector(".calendar-body").innerHTML = "";
+			const calendarBody = calendarRef.querySelector(".calendar-body");
+			if (calendarBody == null) return;
+			calendarBody.innerHTML = "";
 			calendarControl.plotDayNames();
 			calendarControl.displayMonth();
 			calendarControl.displayYear();
 			let count = 1;
 			let prevDateCount = 0;
-
-			calendarControl.prevMonthLastDate =
-				calendarControl.getPreviousMonthLastDate();
-			let prevMonthDatesArray = [];
+			calendarControl.prevMonthLastDayNum = calendarControl.getPreviousMonthLastDateNum();
+			let prevMonthDatesArray: number[] = [];
 			let calendarDays = calendarControl.daysInMonth(
 				calendar.getMonth() + 1,
 				calendar.getFullYear(),
 			);
 			// dates of current month
 			for (let i = 1; i < calendarDays; i++) {
-				if (i < calendarControl.firstDayNumber()) {
+				if (i < calendarControl.firstDateNumber()) {
 					prevDateCount += 1;
-					// calendarRef.querySelector(
-					// 	".calendar-body",
-					// ).innerHTML += `<div class="prev-dates"></div>`;
-					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+					calendarRef.querySelector(".calendar-body")?.insertAdjacentHTML('beforeend',
 						`<div class="prev-dates"></div>`);
-					prevMonthDatesArray.push(calendarControl.prevMonthLastDate--);
+					prevMonthDatesArray.push(calendarControl.prevMonthLastDayNum--);
 				} else {
-					// calendarRef.querySelector(
-					// 	".calendar-body",
-					// ).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
-					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+					calendarRef.querySelector(".calendar-body")?.insertAdjacentHTML('beforeend',
 						`<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`);
 				}
 			}
 			//remaining dates after month dates
 			for (let j = 0; j < prevDateCount + 1; j++) {
-				// calendarRef.querySelector(
-				// 	".calendar-body",
-				// ).innerHTML += `<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`;
-				calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+				calendarRef.querySelector(".calendar-body")?.insertAdjacentHTML('beforeend',
 					`<div class="number-item" data-num=${count}><a class="dateNumber" href="#">${count++}</a></div>`);
 			}
 			calendarControl.highlightToday();
@@ -191,28 +215,13 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 			calendarControl.plotNextMonthDates();
 		},
 		attachEvents: function () {
-			let prevBtn = calendarRef.querySelector(".calendar-prev a");
-			let nextBtn = calendarRef.querySelector(".calendar-next a");
-			let todayDate = calendarRef.querySelector(".calendar-today-date");
+			calendarRef.querySelector(".calendar-prev a")?.addEventListener("click", calendarControl.navigateToPreviousMonth, false);
+			calendarRef.querySelector(".calendar-next a")?.addEventListener("click", calendarControl.navigateToNextMonth);
+			calendarRef.querySelector(".calendar-today-date")?.addEventListener("click", calendarControl.navigateToCurrentMonth, false);
 			let dateNumber = calendarRef.querySelectorAll(".dateNumber");
-			prevBtn.addEventListener(
-				"click",
-				calendarControl.navigateToPreviousMonth,
-				false
-			);
-			nextBtn.addEventListener("click", calendarControl.navigateToNextMonth);
-			todayDate.addEventListener(
-				"click",
-				calendarControl.navigateToCurrentMonth,
-				false
-			);
-			for (var i = 0; i < dateNumber.length; i++) {
-				dateNumber[i].addEventListener(
-					"click",
-					calendarControl.selectDate,
-					false
-				);
-			}
+			dateNumber.forEach(date => {
+				date.addEventListener("click", calendarControl.selectDate, false);
+			});
 		},
 		highlightToday: function () {
 			let currentMonth = calendarControl.localDate.getMonth() + 1;
@@ -229,12 +238,13 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 					[calendar.getDate() - 1].classList.add("calendar-today");
 			}
 		},
-		outlineSelected: function (day) {
+		outlineSelected: function (day: number) {
 			let dateItems = calendarRef.querySelectorAll(".number-item");
 			for (const item of dateItems) {
 				const date = item.querySelector(".dateNumber");
+				if (date == null) return;
 				if (
-					(date.innerHTML == day) &
+					(date.innerHTML == day.toString()) &&
 					!item.classList.contains("calendar-today")
 				) {
 					item.classList.add("calendar-select");
@@ -242,21 +252,20 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 					item.classList.remove("calendar-select");
 				}
 			}
-			// console.log(dateItems.innerHTML);
-			// console.log(day);
-			// dateItems.classList.add("calendar-select");
 		},
-		plotPrevMonthDates: function (dates) {
-			dates.reverse();
+		plotPrevMonthDates: function (dates: number[]): void {
+    		dates.reverse();
 			for (let i = 0; i < dates.length; i++) {
-				if (calendarRef.querySelectorAll(".prev-dates")) {
-					calendarRef.querySelectorAll(".prev-dates")[i].textContent = dates[i];
+				const prevDates = calendarRef.querySelectorAll(".prev-dates")[i];
+				if (prevDates instanceof HTMLElement) {
+					prevDates.textContent = dates[i].toString();
 				}
 			}
 		},
 		plotNextMonthDates: function () {
 			let childElemCount =
-				calendarRef.querySelector(".calendar-body").childElementCount;
+				calendarRef.querySelector(".calendar-body")?.childElementCount;
+				if (childElemCount == null) return;
 			//7 lines
 			if (childElemCount > 42) {
 				let diff = 49 - childElemCount;
@@ -266,14 +275,13 @@ export function createCalendarControl(calendarContainerRef, onDateChange) {
 			//6 lines
 			if (childElemCount > 35 && childElemCount <= 42) {
 				let diff = 42 - childElemCount;
-				calendarControl.loopThroughNextDays(42 - childElemCount);
+				calendarControl.loopThroughNextDays(diff);
 			}
 		},
-		loopThroughNextDays: function (count) {
+		loopThroughNextDays: function (count: number) {
 			if (count > 0) {
 				for (let i = 1; i <= count; i++) {
-					// calendarRef.querySelector(".calendar-body").innerHTML += `<div class="next-dates">${i}</div>`;
-					calendarRef.querySelector(".calendar-body").insertAdjacentHTML('beforeend',
+					calendarRef.querySelector(".calendar-body")?.insertAdjacentHTML('beforeend',
 						`<div class="next-dates">${i}</div>`);
 				}
 			}

@@ -1,4 +1,4 @@
-import { CalendarControl } from "./assets/js/calendar.js";
+import { CalendarControl } from "./assets/js/calendar";
 import { populateDailyApiData } from "./assets/js/dailyApi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
