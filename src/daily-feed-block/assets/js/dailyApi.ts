@@ -1,6 +1,11 @@
-export async function populateDailyApiData(containerRef, date, updateDate = true, eventKey = "Events") {
+export async function populateDailyApiData(
+	containerRef: HTMLDivElement,
+	date: Date,
+	updateDate: boolean = true,
+	eventKey: string = "Events")
+	{
 	const apiDataDiv = containerRef.querySelector(".api-data");
-    if (!apiDataDiv) return;
+    if (apiDataDiv == null) return;
 	const result = await fetchDailyApiData(date, eventKey);
 	if (result.success) {
 		apiDataDiv.innerHTML = `
@@ -8,7 +13,7 @@ export async function populateDailyApiData(containerRef, date, updateDate = true
 			<div class="api-data-copyright">${result.reference}</div>
 		`;
     } else {
-		apiDataDiv.innerHTML = result.error;
+		apiDataDiv.innerHTML = result.error ?? "";
 		// setApiError(result.error);
 		if (result.skipDate) {
 			return; // Do not set date 
@@ -19,16 +24,30 @@ export async function populateDailyApiData(containerRef, date, updateDate = true
 	}
 }
 
-async function fetchDailyApiData(date, eventKey = "Events") {
+interface FetchSuccess {
+    success: true;
+    body: string;
+    reference: string;
+}
+
+interface FetchFailure {
+    success: false;
+    skipDate: boolean;
+    error: string;
+}
+
+type FetchResult = FetchSuccess | FetchFailure;
+
+async function fetchDailyApiData(date: Date, eventKey = "Events"): Promise<FetchResult>  {
 	// if (no proxy) // for additional parameter to select proxy, otw try catch try proxy
 	// const apiUrl = getApiUrl(date);
 	// console.log("apiUrl:", apiUrl);
 
 	const proxyPath = getProxyUrl(date);
 
-	const mapResponse = (data, key) => ({
-		body: data?.[key]?.[0]?.text,
-		reference: data?.[key]?.[0]?.html
+	const mapResponse = (data: any, key: string) => ({
+		body: data?.[key]?.[0]?.text ?? "",
+		reference: data?.[key]?.[0]?.html ?? ""
 	});
 
     return fetchWithRetry(proxyPath)
@@ -36,22 +55,22 @@ async function fetchDailyApiData(date, eventKey = "Events") {
 			const { body, reference } = mapResponse(jsondta?.data, eventKey);
 			if (body) {
 				console.log("jsondta.data:", jsondta.data);
-				return { success: true, body: body, reference: reference };
+				return { success: true as const, body: body, reference: reference };
 			} else {
 				if (jsondta == "Too many requests.") {
-					return { success: false, skipDate: false, error: "Too many requests. Please wait at least 30 seconds." };
+					return { success: false as const, skipDate: false, error: "Too many requests. Please wait at least 30 seconds." };
 				} else {
-					return { success: false, skipDate: false, error: "No data found. Try reloading page." };
+					return { success: false as const, skipDate: false, error: "No data found. Try reloading page." };
 				}
 			}
 		})
-		.catch((error) => {
+		.catch((error: any) => {
 			console.error("Error:", error);
-			return { success: false, skipDate: true, error: "An unexpected error occurred." };
+			return { success: false as const, skipDate: true, error: "An unexpected error occurred." };
 		});
 }
 
-export async function refreshRawJsonData(rawJsonRef, date) {
+export async function refreshRawJsonData(rawJsonRef: HTMLDivElement, date: Date) {
     if (!rawJsonRef) return;
 
 	rawJsonRef.innerHTML = "Loading raw data...";
@@ -62,30 +81,30 @@ export async function refreshRawJsonData(rawJsonRef, date) {
 		})
 }
 
-function renderValueRecursive(val) {
-  if (val === null) return `<span class="null">null</span>`;
-  if (typeof val !== 'object') return `<span>${val}</span>`;
+// function renderValueRecursive(val: any): string {
+//   if (val === null) return `<span class="null">null</span>`;
+//   if (typeof val !== 'object') return `<span>${val}</span>`;
 
-  if (Array.isArray(val)) {
-    return `<ul>${val.map(item => `<li>${renderValueRecursive(item)}</li>`).join('')}</ul>`;
-  }
+//   if (Array.isArray(val)) {
+//     return `<ul>${val.map(item => `<li>${renderValueRecursive(item)}</li>`).join('')}</ul>`;
+//   }
 
-  // Plain object
-  return `<dl>
-    ${Object.entries(val).map(([k, v]) =>
-      `<dt><b>${k}</b></dt><dd>${renderValueRecursive(v)}</dd>`
-    ).join('')}
-  </dl>`;
-}
+//   // Plain object
+//   return `<dl>
+//     ${Object.entries(val).map(([k, v]) =>
+//       `<dt><b>${k}</b></dt><dd>${renderValueRecursive(v)}</dd>`
+//     ).join('')}
+//   </dl>`;
+// }
 
-function renderValueCollapsible(val, key = '') {
+function renderValueCollapsible(val: any, key: string = ''): string {
   if (val === null || typeof val !== 'object') {
     return `${key ? `<b>${key}:</b> ` : ''}${val}`;
   }
 
   const entries = Array.isArray(val)
-    ? val.map((v, i) => renderValueCollapsible(v, i))
-    : Object.entries(val).map(([k, v]) => renderValueCollapsible(v, k));
+    ? val.map((v, i) => renderValueCollapsible(v, i.toString()))
+    : Object.entries(val as Record<string, unknown>).map(([k, v]) => renderValueCollapsible(v, k));
 
   const label = key
     ? `${key} (${Array.isArray(val) ? `${val.length} items` : 'object'})`
@@ -97,40 +116,42 @@ function renderValueCollapsible(val, key = '') {
   </details>`;
 }
 
-function setApiDataDate(containerRef, date) {
+function setApiDataDate(containerRef: HTMLDivElement, date: Date) {
 	const monthName = date.toLocaleString("default", { month: "long" });
 	const apiDataDate = containerRef.querySelector(".api-data-date");
-	apiDataDate.innerHTML = `Daily api data for ${monthName} ${date.getDate()}.`;
+	if (apiDataDate == null) return;
+	apiDataDate.innerHTML = `Daily feed for ${monthName} ${date.getDate()}.`;
 	console.log("api data date element:", apiDataDate);
 }
 
-function getApiUrl(date, padded = true) {
-	let day = date.getDate();
-	if (padded == true && day < 10) {
+function getProxyUrl(date: Date, padded: boolean = true) {
+	const apiUrl = getApiUrl(date, padded);
+	return `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
+}
+
+function getApiUrl(date: Date, padded: boolean = true) {
+	let dayNum = date.getDate();
+	let day = dayNum.toString()
+	if (padded == true && dayNum < 10) {
 		day = "0" + day;
 	}
 	let month = date.getMonth() + 1;
 	return `https://today.zenquotes.io/api/${month}/${day}`;
 }
 
-function getProxyUrl(date, padded = true) {
-	const apiUrl = getApiUrl(date, padded);
-	return `${dailyFeedBlock.ajaxUrl}?action=api_proxy&url=${apiUrl}`;
-}
+// function fetchJsonAsync(url: string) {
+// 	return new Promise((resolve, reject) => {
+// 		fetch(url)
+// 			.then((res) => res.json())
+// 			.then((jsondta) => resolve(jsondta))
+// 			.catch((error) => {
+// 				console.error(error);
+// 				reject(error);
+// 			});
+// 	});
+// }
 
-function fetchJsonAsync(url) {
-	return new Promise((resolve, reject) => {
-		fetch(url)
-			.then((res) => res.json())
-			.then((jsondta) => resolve(jsondta))
-			.catch((error) => {
-				console.error(err);
-				reject(error);
-			});
-	});
-}
-
-async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
+async function fetchWithRetry(url: string, options: RequestInit = {}, retries: number = 3, delay: number = 1000) {
 	for (let attempt = 0; attempt <= retries; attempt++) {
 		try {
 			const response = await fetch(url, options);
@@ -158,7 +179,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
 				}
 			}
 			return data;
-		} catch (err) {
+		} catch (err: any) { // to check?
 			if (
 				attempt < retries &&
 				(err.message === "timeout" || err.name === "TypeError")
