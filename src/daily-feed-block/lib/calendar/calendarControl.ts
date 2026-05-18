@@ -40,7 +40,7 @@ export class CalendarControl implements ICalendarControl {
     private selectedDate: Date;
     private onDateChange: ((date: Date) => void) | null = null;
 
-	constructor(container: HTMLDivElement) {
+	constructor(container: HTMLElement) {
 		// this.calendarContainerRef = container;
 		this.selectedDate = new Date();
 		createCalendarControl(container, this.handleDateChange.bind(this));
@@ -64,8 +64,8 @@ export class CalendarControl implements ICalendarControl {
 	}
 }
 
-export function createCalendarControl(calendarContainerRef: HTMLDivElement, onDateChange: ((date: Date) => void) | null = null) {
-	const calendarRef = calendarContainerRef.querySelector('.calendar') as HTMLDivElement;
+export function createCalendarControl(calendarContainerRef: HTMLElement, onDateChange: ((date: Date) => void) | null = null) {
+	const calendarRef = calendarContainerRef.querySelector('.calendar') as HTMLElement;
 	const calendar = new Date();
 	const calendarControl: CalendarControlState = {
 	// const calendarControl = {
@@ -125,11 +125,11 @@ export function createCalendarControl(calendarContainerRef: HTMLDivElement, onDa
 			calendarControl.attachEventsOnNextPrev();
 		},
 		displayYear: function () {
-			let yearLabel = calendarRef.querySelector(".calendar-year-label") as HTMLDivElement;
+			let yearLabel = calendarRef.querySelector(".calendar-year-label") as HTMLElement;
 			yearLabel.innerHTML = calendar.getFullYear().toString();
 		},
 		displayMonth: function () {
-			let monthLabel = calendarRef.querySelector(".calendar-month-label") as HTMLDivElement;
+			let monthLabel = calendarRef.querySelector(".calendar-month-label") as HTMLElement;
 			monthLabel.innerHTML = calendarControl.calMonthName[calendar.getMonth()];
 		},
 		selectDate: function (e: Event) {

@@ -6,15 +6,15 @@
         "moduleResolution": "bundler",
         "jsx": "react-jsx",
         "strict": true,
-        "allowJs": true,
+        // "allowJs": true,
         "noEmit": true,
         "resolveJsonModule": true,
         "noUnusedLocals": true,
         "paths": {
         "@components/*": ["./src/daily-feed-block/components/*"],
         "@daily-feed-block/*": ["./src/daily-feed-block/*"],
-        "@daily-feed-block/types": ["./src/daily-feed-block/types.ts"],
-        "@daily-feed-block/constants": ["./src/daily-feed-block/constants.json"]
+        "@block-root/types": ["./src/daily-feed-block/types.ts"],
+        "@block-root/constants": ["./src/daily-feed-block/constants.json"]
         }
     },
     "include": [

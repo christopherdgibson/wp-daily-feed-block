@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, ColorPicker, Modal, PanelBody } from "@wordpress/components";
-import type { EditProps } from "@daily-feed-block/types";
+import type { EditProps } from "@block-root/types";
 import { useState } from "@wordpress/element";
 import TabButton from "./TabButton";
 
-import constants from "@daily-feed-block/constants.json";
+import constants from "@block-root/constants";
 
 const DEFAULT_CAL_BG_COLOR = constants.calendarDefaults.calendarBgColor;
 const DEFAULT_CAL_FONT_COLOR = constants.calendarDefaults.calendarFontColor;

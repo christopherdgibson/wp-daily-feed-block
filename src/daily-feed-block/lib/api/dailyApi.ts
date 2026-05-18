@@ -1,5 +1,5 @@
 export async function populateDailyFeedData(
-	containerRef: HTMLDivElement,
+	containerRef: HTMLElement,
 	date: Date,
 	updateDate: boolean = true,
 	eventKey: string = "Events")
@@ -70,7 +70,7 @@ async function fetchDailyApiData(date: Date, eventKey: string = "Events"): Promi
 		});
 }
 
-export async function refreshRawJsonData(rawJsonRef: HTMLDivElement, date: Date) {
+export async function refreshRawJsonData(rawJsonRef: HTMLElement, date: Date) {
     if (!rawJsonRef) return;
 
 	rawJsonRef.innerHTML = "Loading raw data...";
@@ -116,7 +116,7 @@ function renderValueCollapsible(val: any, key: string = ''): string {
   </details>`;
 }
 
-function setApiDataDate(containerRef: HTMLDivElement, date: Date) {
+function setApiDataDate(containerRef: HTMLElement, date: Date) {
 	const monthName = date.toLocaleString("default", { month: "long" });
 	const apiDataDate = containerRef.querySelector(".api-data-date");
 	if (apiDataDate == null) return;

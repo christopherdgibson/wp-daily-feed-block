@@ -1,9 +1,9 @@
 import { PanelBody, DuotonePicker } from "@wordpress/components";
 import { useEffect, useRef } from "@wordpress/element";
 
-import type { EditProps } from "@daily-feed-block/types";
+import type { EditProps } from "@block-root/types";
 
-import constants from "@daily-feed-block/constants";
+import constants from "@block-root/constants";
 
 const DEFAULT_GRADIENT_LEFT = constants.themePresets.default.gradientColorLeft;
 const DEFAULT_GRADIENT_RIGHT =

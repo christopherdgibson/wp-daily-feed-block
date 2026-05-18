@@ -2,8 +2,8 @@ import { useState } from "@wordpress/element";
 import { ButtonGroup } from "@wordpress/components";
 import type { Dispatch, SetStateAction } from "react";
 
-import type { SetAttributesProps } from "@daily-feed-block/types";
-import constants from "@daily-feed-block/constants";
+import type { SetAttributesProps } from "@block-root/types";
+import constants from "@block-root/constants";
 
 import "./styles.css";
 

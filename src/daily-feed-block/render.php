@@ -3,14 +3,14 @@ $calendar_bg = $attributes['calendarBgColor'] ?? '#262829';
 $calendar_font = $attributes['calendarFontColor'] ?? '#fff';
 $card_bg = $attributes['cardBgColor'] ?? '#e3e3e3';
 $card_font = $attributes['cardFontColor'] ?? '#0d3ca1';
-$divider_left = $attributes['dividerColorLeft'] ?? '#0000ff';
-$divider_right = $attributes['dividerColorRight'] ?? '#ffa500';
+$gradient_left = $attributes['gradientColorLeft'] ?? '#0000ff';
+$gradient_right = $attributes['gradientColorRight'] ?? '#ffa500';
 
 $cardStyles = implode(';', [
     "--base-bg: " . esc_attr($card_bg),
     "--font-selected: " . esc_attr($card_font),
-    "--accent-primary: " . esc_attr($divider_left),
-    "--accent-secondary: " . esc_attr($divider_right),
+    "--accent-primary: " . esc_attr($gradient_left),
+    "--accent-secondary: " . esc_attr($gradient_right),
 ]);
 $calendarStyles = implode(';', [
     "--calendar-bg-color: " . esc_attr($calendar_bg),
