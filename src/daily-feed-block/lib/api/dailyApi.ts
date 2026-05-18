@@ -1,4 +1,4 @@
-export async function populateDailyApiData(
+export async function populateDailyFeedData(
 	containerRef: HTMLDivElement,
 	date: Date,
 	updateDate: boolean = true,
@@ -38,7 +38,7 @@ interface FetchFailure {
 
 type FetchResult = FetchSuccess | FetchFailure;
 
-async function fetchDailyApiData(date: Date, eventKey = "Events"): Promise<FetchResult>  {
+async function fetchDailyApiData(date: Date, eventKey: string = "Events"): Promise<FetchResult>  {
 	// if (no proxy) // for additional parameter to select proxy, otw try catch try proxy
 	// const apiUrl = getApiUrl(date);
 	// console.log("apiUrl:", apiUrl);

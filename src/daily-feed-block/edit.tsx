@@ -4,10 +4,10 @@ import { useBlockProps, InspectorControls } from "@wordpress/block-editor";
 import { memo } from "react";
 import type { RefObject} from 'react';
 
-import './assets/css/dailyApi.css';
-import './assets/css/calendar.css';
-import { CalendarControl } from "./assets/js/calendar";
-import { refreshRawJsonData, populateDailyApiData } from "./assets/js/dailyApi";
+import './lib/api/dailyApi.css';
+import './lib/calendar/calendar.css';
+import { CalendarControl } from "./lib/calendar/calendarControl";
+import { refreshRawJsonData, populateDailyFeedData } from "./lib/api/dailyApi";
 import { useRef, useEffect, useState } from "@wordpress/element";
 import type { EditProps, ThemeStyles } from "@daily-feed-block/types";
 
@@ -57,7 +57,7 @@ export default function Edit({ attributes, setAttributes }: EditProps): JSX.Elem
         const instance = new CalendarControl(calendarContainerRef.current);
         instance.setOnDateChange((date: Date) => {
 			if (containerRef?.current == null) return;
-            populateDailyApiData(containerRef.current, date);
+            populateDailyFeedData(containerRef.current, date);
 			setSelectedDate(date);
         });
         setCalendarInstance(instance);

@@ -16,15 +16,6 @@ export interface EditProps extends SetAttributesProps {
     attributes: BlockAttributes;
 }
 
-export interface SelectedCard {
-    index: number | null;
-    subIndex: number | null;
-}
-
-export type OnClick = () => void;
-
-export type OnChange = (value: string) => void;
-
 export interface ThemeStyles extends React.CSSProperties {
     "--base-bg"?: string;
     "--font-selected"?: string;

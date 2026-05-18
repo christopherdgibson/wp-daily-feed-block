@@ -1,5 +1,5 @@
-import { CalendarControl } from "./assets/js/calendar";
-import { populateDailyApiData } from "./assets/js/dailyApi";
+import { CalendarControl } from "./lib/calendar/calendarControl";
+import { populateDailyFeedData } from "./lib/api/dailyApi";
 
 document.addEventListener("DOMContentLoaded", () => {
     const calendarCard = document.querySelector('.api-data-container .card');

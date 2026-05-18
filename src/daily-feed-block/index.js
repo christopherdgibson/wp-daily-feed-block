@@ -14,8 +14,8 @@ import { registerBlockType } from '@wordpress/blocks';
  */
 // import './style.scss';
 
-import './assets/css/dailyApi.css';
-import './assets/css/calendar.css';
+import './lib/api/dailyApi.css';
+import './lib/calendar/calendar.css';
 
 /**
  * Internal dependencies
